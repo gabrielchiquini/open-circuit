@@ -1,5 +1,36 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+
+# Created by https://www.gitignore.io/api/cordova,visualstudiocode
+# Edit at https://www.gitignore.io/?templates=cordova,visualstudiocode
+
+### Cordova ###
+# gitignore template for the Cordova framework
+# website: https://cordova.apache.org/
+#
+# Recommended template: Node.gitignore
+
+# App platform binaries and built files
+/platforms
+
+# Optional to ignore plugin Git clones
+/plugins
+/www
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+# End of https://www.gitignore.io/api/cordova,visualstudiocode
+
+
 # dependencies
 /node_modules
 /.pnp
