@@ -1,6 +1,11 @@
 import React, { Component } from "react";
+import { SomePart } from "./SimulatorContainer";
 
-export default class PartSelector extends Component {
+interface IPropsType {
+  selectedElement: SomePart;
+}
+
+export default class PartSelector extends Component<IPropsType> {
   render() {
     return (
       <div className="circuit-parts">

@@ -1,15 +1,26 @@
 import React, { Component } from "react";
 import Konva, { KonvaEventObject } from 'konva';
 import { CIRCUIT_MESH, getImage } from "../../util/imageUtil";
+import { SomePart } from "./SimulatorContainer";
+import Circuit from "./Circuit/Circuit";
 
+interface IProps { circuit: Circuit; selectedElement: SomePart; }
 
-export default class Circuit extends Component {
+export default class CircuitCanvas extends Component<IProps> {
   canvas: Konva.Stage = null;
   circuitLayer: Konva.Layer = null;
-  constructor(props: {}) {
+  circuit: Circuit;
+
+  constructor(props: Readonly<IProps>) {
     super(props);
+    this.circuit = props.circuit;
   }
 
+  render() {
+    return (
+      <div className="circuit-area" id="circuit-area"></div>
+    );
+  }
   componentDidMount() {
     this.setupKonva();
   }
@@ -28,27 +39,25 @@ export default class Circuit extends Component {
     await this.setupBackground(baseLayer);
     this.canvas.draw();
   }
+
   setupCircuitLayer(): any {
     this.circuitLayer = new Konva.Layer();
   }
 
   addSelectedElement(ev: KonvaEventObject<MouseEvent>): void {
-    const node = new Konva.Star({
-      fill: 'red',
-      numPoints: 6,
-      innerRadius: 30,
-      outerRadius: 5,
+    const part = new this.props.selectedElement();
+    this.circuit.addPart(part);
+    const node = new Konva.Shape({
+      id: part.id,
       x: ev.evt.layerX,
       y: ev.evt.layerY,
     });
-    this.circuitLayer.add(node);
-    this.canvas.draw();
+    this.addNode(node);
   }
 
-  render() {
-    return (
-      <div className="circuit-area" id="circuit-area"></div>
-    );
+  private addNode(node: Konva.Node) {
+    this.circuitLayer.add(node);
+    this.canvas.draw();
   }
 
   private async setupBackground(baseLayer: Konva.Layer) {
@@ -60,6 +69,6 @@ export default class Circuit extends Component {
       fillPatternRepeat: 'repeat',
     });
     baseLayer.add(background);
-    baseLayer.on('click', (ev) => this.addSelectedElement(ev));
+    baseLayer.on('click', ev => this.addSelectedElement(ev));
   }
 }
