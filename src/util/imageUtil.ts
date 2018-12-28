@@ -6,5 +6,5 @@ export function getImage(path: string): Promise<HTMLImageElement> {
     image.onload = () => resolve(image);
     image.onerror = (event) => reject(event);
     image.src = path;
-  })
+  });
 }
