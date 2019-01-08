@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { connect, Provider } from 'react-redux';
 import CircuitCanvas from "./CircuitCanvas";
 import PartSelector from "./PartSelector";
-import Resistor from "./Circuit/Parts/Resistor";
 import Circuit from "./Circuit/Circuit";
-import Part from "./Circuit/Parts/Part";
+import Part from "./Parts/Part";
+import Resistor from "./Parts/Resistor";
 
 export type SomePart = new() => Part;
 

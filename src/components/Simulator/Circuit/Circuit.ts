@@ -1,4 +1,4 @@
-import Part from "./Parts/Part";
+import Part from "../Parts/Part";
 
 export default class Circuit {
   private parts: Part[];

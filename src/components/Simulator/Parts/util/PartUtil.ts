@@ -1,7 +1,7 @@
-import { CIRCUIT_COLOR, ASSET_DIR } from "../util";
 import { Circle, Node, Rect, Group } from "konva";
-import { getImage } from "../../../../util/imageUtil";
 import PartName from "./PartName";
+import { CIRCUIT_COLOR, ASSET_DIR } from "../../Circuit/util";
+import { getImage } from "../../../../util/imageUtil";
 
 const POLE_RADIUS = 5.7;
 

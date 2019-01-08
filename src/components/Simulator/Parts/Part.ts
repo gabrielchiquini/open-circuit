@@ -1,6 +1,7 @@
 import uuid from 'uuid/v4';
 import Konva from 'konva';
-import { partRect, centerPositionY } from './PartUtil';
+import { partRect, centerPositionY } from './util/PartUtil';
+import IDimension from './util/IDimension';
 
 export default abstract class Part {
   _node: Promise<Konva.Group>;
@@ -18,6 +19,9 @@ export default abstract class Part {
     }
     this._node = this.createNode();
   }
+
+  abstract get dimension(): IDimension;
+
   hasPole(pole: string) {
     return this.uids.includes(pole);
   }

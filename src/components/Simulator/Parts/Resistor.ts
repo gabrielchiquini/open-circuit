@@ -1,17 +1,19 @@
 import Konva from "konva";
 import Part from "./Part";
-import {
-  getPoleShapes,
-  getAsset,
-  getNodeCenterY,
-  centerPositionY,
-  partRect,
-} from "./PartUtil";
-import { scaleHeight } from "../../../../util/imageUtil";
+import { getPoleShapes, getAsset, getNodeCenterY } from "./util/PartUtil";
+import { scaleHeight } from "../../../util/imageUtil";
+import IDimension from "./util/IDimension";
 
 const defaultResistance = 1e3;
 
 export default class Resistor extends Part {
+  get dimension(): IDimension {
+    return {
+      width: 4,
+      height: 2,
+    };
+  }
+
   resistance: number;
 
   constructor() {

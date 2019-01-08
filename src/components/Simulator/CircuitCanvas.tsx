@@ -10,7 +10,7 @@ import {
   calculateCenter,
   CIRCUIT_COLOR,
 } from "./Circuit/util";
-import PartName from "./Circuit/Parts/PartName";
+import PartName from "./Parts/util/PartName";
 
 interface IProps {
   circuit: Circuit;
