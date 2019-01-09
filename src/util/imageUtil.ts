@@ -1,3 +1,5 @@
+import IDimension from "./IDimension";
+
 export function getImage(path: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -19,4 +21,13 @@ export function scaleWidth(image: HTMLImageElement, newWidth: number) {
   const newHeight = newWidth * proportion;
   image.height = newHeight;
   image.width = newWidth;
+}
+
+export function scaleHigherDimension(image: HTMLImageElement, newDimension: IDimension) {
+  const higherKey: keyof IDimension = image.height > image.width ? 'height' : 'width';
+  const lowerKey: keyof IDimension = image.height > image.width ? 'width' : 'height';
+  const proportion = image[lowerKey] / image[higherKey];
+  const newLower = newDimension[higherKey] * proportion;
+  image[higherKey] = newDimension[higherKey];
+  image[lowerKey] = newLower;
 }

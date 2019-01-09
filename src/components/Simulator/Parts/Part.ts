@@ -6,9 +6,10 @@ import {
   convertDimension,
   getAsset,
   getPoleShapes,
+  centerPositionX,
 } from "./util/PartUtil";
-import IDimension from "./util/IDimension";
-import { scaleWidth } from "../../../util/imageUtil";
+import IDimension from "../../../util/IDimension";
+import { scaleHigherDimension } from "../../../util/imageUtil";
 
 export default abstract class Part {
   _node: Promise<Konva.Group>;
@@ -36,7 +37,8 @@ export default abstract class Part {
 
   protected async getImage() {
     const image = await getAsset(this.constructor.name);
-    scaleWidth(image, convertDimension(this.dimension).width);
+    const realDimension = convertDimension(this.dimension);
+    scaleHigherDimension(image, realDimension);
     return image;
   }
 
@@ -46,7 +48,7 @@ export default abstract class Part {
     const shape = partRect(this.dimension, group, this.id);
     const imageNode = new Konva.Image({
       image,
-      x: group.x(),
+      x: centerPositionX(shape, image.width),
       y: centerPositionY(shape, image.height),
     });
     group.add(shape, imageNode);
