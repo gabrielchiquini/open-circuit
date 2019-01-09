@@ -34,8 +34,8 @@ export function partRect(dimension: IDimension, group: Group, id: string) {
   return shape;
 }
 
-export function getAsset(className: string): Promise<HTMLImageElement> {
-  return getImage(ASSET_DIR + className + '.svg');
+export function getAsset(name: string): Promise<HTMLImageElement> {
+  return getImage(ASSET_DIR + name + '.svg');
 }
 
 export function getNodeCenterX(node: Node): number {

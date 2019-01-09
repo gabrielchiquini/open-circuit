@@ -1,8 +1,7 @@
 import Part from "./Part";
 import IDimension from "../../../util/IDimension";
 import Konva from "konva";
-import { centerPositionX, getNodeCenterX, getAsset, convertDimension } from "./util/PartUtil";
-import { scaleHeight } from "../../../util/imageUtil";
+import { getNodeCenterX } from "./util/PartUtil";
 
 export default class VoltageSource extends Part {
   constructor() {
