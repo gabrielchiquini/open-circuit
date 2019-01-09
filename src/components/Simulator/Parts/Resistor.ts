@@ -22,8 +22,7 @@ export default class Resistor extends Part {
       height: 2,
     };
   }
-  protected definePoles(shape: Konva.Rect, group: Konva.Group) {
-    const poleShapes = getPoleShapes(this.uids);
+  protected definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Circle[]) {
     const leftPole = poleShapes[0];
     const rightPole = poleShapes[1];
     leftPole.x(group.x());

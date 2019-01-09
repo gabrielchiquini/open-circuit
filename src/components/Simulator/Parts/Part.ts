@@ -5,6 +5,7 @@ import {
   centerPositionY,
   convertDimension,
   getAsset,
+  getPoleShapes,
 } from "./util/PartUtil";
 import IDimension from "./util/IDimension";
 import { scaleWidth } from "../../../util/imageUtil";
@@ -14,7 +15,7 @@ export default abstract class Part {
   protected uids: string[];
   private _id: string;
 
-  constructor(public poles = 1) {
+  constructor(public poles: number) {
     if (poles < 1) {
       throw new RangeError("All parts must have at least one pole");
     }
@@ -31,7 +32,7 @@ export default abstract class Part {
   }
 
   protected abstract get dimension(): IDimension;
-  protected abstract definePoles(shape: Konva.Rect, group: Konva.Group): void;
+  protected abstract definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Circle[]): void;
 
   protected async getImage() {
     const image = await getAsset(this.constructor.name);
@@ -49,7 +50,8 @@ export default abstract class Part {
       y: centerPositionY(shape, image.height),
     });
     group.add(shape, imageNode);
-    this.definePoles(shape, group);
+    const poleShapes = getPoleShapes(this.uids);
+    this.definePoles(shape, group, poleShapes);
     return group;
   }
 
