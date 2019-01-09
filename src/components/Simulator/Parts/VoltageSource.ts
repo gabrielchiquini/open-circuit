@@ -1,5 +1,5 @@
 import Part from "./Part";
-import IDimension from "./util/IDimension";
+import IDimension from "../../../util/IDimension";
 import Konva from "konva";
 import { centerPositionX, getNodeCenterX, getAsset, convertDimension } from "./util/PartUtil";
 import { scaleHeight } from "../../../util/imageUtil";

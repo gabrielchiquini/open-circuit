@@ -2,7 +2,7 @@ import { Circle, Node, Rect, Group } from "konva";
 import PartName from "./PartName";
 import { CIRCUIT_COLOR, ASSET_DIR } from "../../Circuit/util";
 import { getImage } from "../../../../util/imageUtil";
-import IDimension from "./IDimension";
+import IDimension from "../../../../util/IDimension";
 import { AREA_UNIT as UNIT } from '../../Circuit/util';
 
 export const AREA_UNIT = UNIT;

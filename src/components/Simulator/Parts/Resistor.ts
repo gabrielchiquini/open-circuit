@@ -4,7 +4,7 @@ import {
   getPoleShapes,
   getNodeCenterY,
 } from "./util/PartUtil";
-import IDimension from "./util/IDimension";
+import IDimension from "../../../util/IDimension";
 
 const defaultResistance = 1e3;
 
