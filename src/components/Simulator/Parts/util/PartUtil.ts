@@ -29,7 +29,7 @@ export function partRect(dimension: IDimension, group: Group, id: string) {
     name: PartName.Part,
     x: group.x(),
     y: group.y(),
-    stroke: 'black',
+    stroke: 'transparent',
   });
   return shape;
 }
@@ -49,6 +49,11 @@ export function getNodeCenterY(node: Node): number {
 export function centerPositionY(baseNode: Node, targetHeight: number): number {
   const centerPoint = getNodeCenterY(baseNode);
   return centerPoint - targetHeight / 2;
+}
+
+export function centerPositionX(baseNode: Node, targetWidth: number): number {
+  const centerPoint = getNodeCenterY(baseNode);
+  return centerPoint - targetWidth / 2;
 }
 
 export function convertDimension(base: IDimension): IDimension {
