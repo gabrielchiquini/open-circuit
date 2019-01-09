@@ -6,7 +6,7 @@ import Circuit from "./Circuit/Circuit";
 import {
   CIRCUIT_MESH,
   calcGroupDimension,
-  ensureInside,
+  correctPosition,
   calculateCenter,
   CIRCUIT_COLOR,
 } from "./Circuit/util";
@@ -102,11 +102,11 @@ export default class CircuitCanvas extends Component<IProps> {
 
   private setupPartPosition(node: Konva.Group, posX: number, posY: number) {
     const groupDimension = calcGroupDimension(node);
-    const xPosition = ensureInside(
+    const xPosition = correctPosition(
       calculateCenter(groupDimension.width, posX),
       this.width,
     );
-    const yPosition = ensureInside(
+    const yPosition = correctPosition(
       calculateCenter(groupDimension.height, posY),
       this.heigth,
     );
@@ -117,15 +117,20 @@ export default class CircuitCanvas extends Component<IProps> {
   private guessClickPosition(ev: Konva.KonvaEventObject<Event>) {
     let posX = 0;
     let posY = 0;
-    if (ev.evt instanceof TouchEvent) {
-      const touch = ev.evt.changedTouches[0];
-      posY = touch.clientY - this.canvas.container().offsetTop;
-      posX = touch.clientX - this.canvas.container().offsetLeft;
-    } else if (ev.evt instanceof MouseEvent) {
+    if (this.isMouseEvent(ev.evt)) {
       posY = ev.evt.layerY;
       posX = ev.evt.layerX;
+    } else {
+      const touch = (ev.evt as TouchEvent).changedTouches[0];
+      posY = touch.clientY - this.canvas.container().offsetTop;
+      posX = touch.clientX - this.canvas.container().offsetLeft;
     }
     return { posX, posY };
+  }
+
+  private isMouseEvent(event: Event): event is MouseEvent {
+    const anyEvent = event as any;
+    return typeof anyEvent.layerX === 'number' && typeof anyEvent.layerY === 'number';
   }
 
   private addNode(node: Konva.Node) {
