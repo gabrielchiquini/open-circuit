@@ -1,19 +1,14 @@
 import Konva from "konva";
 import Part from "./Part";
-import { getPoleShapes, getAsset, getNodeCenterY } from "./util/PartUtil";
-import { scaleHeight } from "../../../util/imageUtil";
+import {
+  getPoleShapes,
+  getNodeCenterY,
+} from "./util/PartUtil";
 import IDimension from "./util/IDimension";
 
 const defaultResistance = 1e3;
 
 export default class Resistor extends Part {
-  get dimension(): IDimension {
-    return {
-      width: 4,
-      height: 2,
-    };
-  }
-
   resistance: number;
 
   constructor() {
@@ -21,12 +16,12 @@ export default class Resistor extends Part {
     this.resistance = defaultResistance;
   }
 
-  protected async getImage() {
-    const image = await getAsset(this.constructor.name);
-    scaleHeight(image, 13);
-    return image;
+  protected get dimension(): IDimension {
+    return {
+      width: 4,
+      height: 2,
+    };
   }
-
   protected definePoles(shape: Konva.Rect, group: Konva.Group) {
     const poleShapes = getPoleShapes(this.uids);
     const leftPole = poleShapes[0];

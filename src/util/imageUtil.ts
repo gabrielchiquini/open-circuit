@@ -13,3 +13,10 @@ export function scaleHeight(image: HTMLImageElement, newHeight: number) {
   image.height = newHeight;
   image.width = newWidth;
 }
+
+export function scaleWidth(image: HTMLImageElement, newWidth: number) {
+  const proportion = image.height / image.width;
+  const newHeight = newWidth * proportion;
+  image.height = newHeight;
+  image.width = newWidth;
+}

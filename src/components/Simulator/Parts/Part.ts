@@ -1,7 +1,13 @@
-import uuid from 'uuid/v4';
-import Konva from 'konva';
-import { partRect, centerPositionY } from './util/PartUtil';
-import IDimension from './util/IDimension';
+import uuid from "uuid/v4";
+import Konva from "konva";
+import {
+  partRect,
+  centerPositionY,
+  convertDimension,
+  getAsset,
+} from "./util/PartUtil";
+import IDimension from "./util/IDimension";
+import { scaleWidth } from "../../../util/imageUtil";
 
 export default abstract class Part {
   _node: Promise<Konva.Group>;
@@ -10,7 +16,7 @@ export default abstract class Part {
 
   constructor(public poles = 1) {
     if (poles < 1) {
-      throw new RangeError('All parts must have at least one pole');
+      throw new RangeError("All parts must have at least one pole");
     }
     this.uids = [];
     this._id = uuid();
@@ -20,19 +26,23 @@ export default abstract class Part {
     this._node = this.createNode();
   }
 
-  abstract get dimension(): IDimension;
-
   hasPole(pole: string) {
     return this.uids.includes(pole);
   }
 
-  protected abstract getImage(): Promise<HTMLImageElement>;
+  protected abstract get dimension(): IDimension;
   protected abstract definePoles(shape: Konva.Rect, group: Konva.Group): void;
+
+  protected async getImage() {
+    const image = await getAsset(this.constructor.name);
+    scaleWidth(image, convertDimension(this.dimension).width);
+    return image;
+  }
 
   private async createNode(): Promise<Konva.Group> {
     const group = new Konva.Group();
     const image = await this.getImage();
-    const shape = partRect(image.width, group, this.id);
+    const shape = partRect(this.dimension, group, this.id);
     const imageNode = new Konva.Image({
       image,
       x: group.x(),

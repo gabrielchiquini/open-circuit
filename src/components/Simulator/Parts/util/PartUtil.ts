@@ -2,8 +2,12 @@ import { Circle, Node, Rect, Group } from "konva";
 import PartName from "./PartName";
 import { CIRCUIT_COLOR, ASSET_DIR } from "../../Circuit/util";
 import { getImage } from "../../../../util/imageUtil";
+import IDimension from "./IDimension";
+import { AREA_UNIT as UNIT } from '../../Circuit/util';
 
+export const AREA_UNIT = UNIT;
 const POLE_RADIUS = 5.7;
+
 
 export function getPoleShapes(ids: string[]) {
   return ids.map(uid => {
@@ -16,16 +20,16 @@ export function getPoleShapes(ids: string[]) {
   });
 }
 
-export function partRect(width: number, group: Group, id: string) {
-  const height = 25;
+export function partRect(dimension: IDimension, group: Group, id: string) {
+  const realDimension = convertDimension(dimension);
   const shape = new Rect({
     id,
-    width,
-    height,
+    width: realDimension.width,
+    height: realDimension.height,
     name: PartName.Part,
     x: group.x(),
     y: group.y(),
-    stroke: 'transparent',
+    stroke: 'black',
   });
   return shape;
 }
@@ -45,4 +49,11 @@ export function getNodeCenterY(node: Node): number {
 export function centerPositionY(baseNode: Node, targetHeight: number): number {
   const centerPoint = getNodeCenterY(baseNode);
   return centerPoint - targetHeight / 2;
+}
+
+export function convertDimension(base: IDimension): IDimension {
+  return {
+    width: base.width * AREA_UNIT,
+    height: base.height * AREA_UNIT,
+  };
 }
