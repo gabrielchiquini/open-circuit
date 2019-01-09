@@ -52,7 +52,7 @@ export function centerPositionY(baseNode: Node, targetHeight: number): number {
 }
 
 export function centerPositionX(baseNode: Node, targetWidth: number): number {
-  const centerPoint = getNodeCenterY(baseNode);
+  const centerPoint = getNodeCenterX(baseNode);
   return centerPoint - targetWidth / 2;
 }
 
