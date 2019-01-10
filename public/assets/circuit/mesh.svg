@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="20"
-   height="20"
-   viewBox="0 0 5.2916663 5.2916662"
+   width="15"
+   height="15.000019"
+   viewBox="0 0 3.9687498 3.9687548"
    version="1.1"
    id="svg1369"
    sodipodi:docname="mesh.svg"
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="10.175003"
-     inkscape:cy="59.07171"
+     inkscape:zoom="44.8"
+     inkscape:cx="-0.89648293"
+     inkscape:cy="8.9418211"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -57,10 +57,10 @@
      inkscape:label="Camada 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0.12308767,-288.43429)">
+     transform="translate(0.12308769,-289.7572)">
     <path
-       style="fill:none;stroke:#949494;stroke-width:0.19694579;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m -0.02461478,293.72595 v -5.19319 H 5.1685786"
+       style="fill:none;stroke:#949494;stroke-width:0.14770947;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -0.04923295,293.72595 v -3.8949 H 3.8456621"
        id="path1914"
        inkscape:connector-curvature="0" />
   </g>
