@@ -3,7 +3,10 @@ import IDimension from "../../../util/IDimension";
 import Konva from "konva";
 import { getNodeCenterX } from "./util/PartUtil";
 
+const DEFAULT_VOLTAGE = 5;
+
 export default class VoltageSource extends Part {
+  voltage = DEFAULT_VOLTAGE;
   constructor() {
     super(2);
   }
