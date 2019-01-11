@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Konva, { KonvaEventObject } from 'konva';
-import { SomePart } from './SimulatorContainer';
+import { SomePart } from './Parts';
 import Circuit from './Circuit/Circuit';
 import {
   calcGroupDimension,
@@ -15,7 +15,7 @@ import PartName from './Parts/util/PartName';
 
 interface IProps {
   circuit: Circuit;
-  selectedElement: SomePart;
+  selectedElement: () => SomePart;
 }
 
 export default class CircuitCanvas extends Component<IProps> {
@@ -68,7 +68,8 @@ export default class CircuitCanvas extends Component<IProps> {
 
   async addSelectedElement(ev: KonvaEventObject<Event>): Promise<void> {
     const { posX, posY } = this.guessClickPosition(ev);
-    const part = new this.props.selectedElement();
+    const selectedConstructor = this.props.selectedElement();
+    const part = new selectedConstructor();
     const node = await part.konvaNode;
     this.setupPartPosition(node, posX, posY);
     this.addEvents(node);
