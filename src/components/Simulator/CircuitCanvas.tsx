@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import Konva, { KonvaEventObject } from 'konva';
-import { getImage } from '../../util/imageUtil';
 import { SomePart } from './SimulatorContainer';
 import Circuit from './Circuit/Circuit';
 import {
-  CIRCUIT_MESH,
   calcGroupDimension,
   correctPosition,
   calculateCenter,
   CIRCUIT_COLOR,
+  AREA_UNIT,
+  getVerticalLine,
+  getHorizontalLine,
 } from './Circuit/util';
 import PartName from './Parts/util/PartName';
 
@@ -36,8 +37,8 @@ export default class CircuitCanvas extends Component<IProps> {
         id="circuit-area"
         ref={div => (this.container = div)}
         style={{
-          width: '400px',
-          height: '400px',
+          width: window.innerWidth,
+          height: window.innerHeight,
           overflow: 'scroll',
         }}
       />
@@ -86,6 +87,7 @@ export default class CircuitCanvas extends Component<IProps> {
 
   private handlePoleClick(ev: Konva.KonvaEventObject<Event>) {
     const target = ev.target as Konva.Circle;
+    ev.cancelBubble = true;
     if (this.selectedPole) {
       this.circuit.addConnection(this.selectedPole.id(), target.id());
       const position1 = this.selectedPole.getAbsolutePosition();
@@ -93,7 +95,7 @@ export default class CircuitCanvas extends Component<IProps> {
       const line = new Konva.Line({
         points: [position1.x, position1.y, position2.x, position2.y],
         stroke: CIRCUIT_COLOR,
-        strokeWidth: 1,
+        strokeWidth: 3,
         tension: 1,
       });
       this.selectedPole.fill(CIRCUIT_COLOR);
@@ -133,7 +135,7 @@ export default class CircuitCanvas extends Component<IProps> {
       posX = touch.pageX;
     }
     posY += this.container.scrollTop - this.canvas.container().offsetTop;
-    posX -= this.canvas.container().offsetLeft;
+    posX += this.container.scrollLeft - this.canvas.container().offsetLeft;
     return { posX, posY };
   }
 
@@ -149,17 +151,14 @@ export default class CircuitCanvas extends Component<IProps> {
     this.canvas.batchDraw();
   }
 
-  private async setupBackground(baseLayer: Konva.Layer) {
-    const meshImage = await getImage(CIRCUIT_MESH);
-    const background = new Konva.Rect({
-      width: baseLayer.width(),
-      height: baseLayer.height(),
-      fillPatternImage: meshImage,
-      fillPatternRepeat: 'repeat',
-      preventDefault: false,
-    });
-    baseLayer.add(background);
-    baseLayer.on('click touchend', ev => this.addSelectedElement(ev));
+  private setupBackground(baseLayer: Konva.Layer) {
+    for (let i = 0; i < this.canvas.width(); i += AREA_UNIT) {
+      baseLayer.add(getVerticalLine(i, this.canvas));
+    }
+    for (let i = 0; i < this.canvas.height(); i += AREA_UNIT) {
+      baseLayer.add(getHorizontalLine(i, this.canvas));
+    }
+    this.canvas.on('click touchend', ev => this.addSelectedElement(ev));
   }
 
   private get width(): number {
