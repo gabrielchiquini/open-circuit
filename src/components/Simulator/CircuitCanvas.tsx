@@ -78,7 +78,7 @@ export default class CircuitCanvas extends Component<IProps> {
   }
   addEvents(node: Konva.Group): any {
     node.getChildren().each(childNode => {
-      if (childNode.name() === PartName.Pole) {
+      if (childNode.name() === PartName.PoleGroup) {
         childNode.on('click touchend', ev => {
           this.handlePoleClick(ev);
         });
@@ -87,7 +87,8 @@ export default class CircuitCanvas extends Component<IProps> {
   }
 
   private handlePoleClick(ev: Konva.KonvaEventObject<Event>) {
-    const target = ev.target as Konva.Circle;
+    const targetGroup = ev.target.getParent();
+    const target = Array.from(targetGroup.getChildren()).find(shape => shape.name() === PartName.Pole) as Konva.Circle;
     ev.cancelBubble = true;
     if (this.selectedPole) {
       this.circuit.addConnection(this.selectedPole.id(), target.id());
@@ -159,7 +160,7 @@ export default class CircuitCanvas extends Component<IProps> {
     for (let i = 0; i < this.canvas.height(); i += AREA_UNIT) {
       baseLayer.add(getHorizontalLine(i, this.canvas));
     }
-    this.canvas.on('click touchend', ev => this.addSelectedElement(ev));
+    this.canvas.on('click tap', ev => this.addSelectedElement(ev));
   }
 
   private get width(): number {

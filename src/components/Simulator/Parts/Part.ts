@@ -33,7 +33,7 @@ export default abstract class Part {
   }
 
   protected abstract get dimension(): IDimension;
-  protected abstract definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Circle[]): void;
+  protected abstract definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Group[]): void;
 
   protected async getImage() {
     const image = await getAsset(this.constructor.name);
