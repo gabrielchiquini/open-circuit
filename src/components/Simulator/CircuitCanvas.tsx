@@ -67,6 +67,9 @@ export default class CircuitCanvas extends Component<IProps> {
   }
 
   async addSelectedElement(ev: KonvaEventObject<Event>): Promise<void> {
+    if (ev.target !== ev.currentTarget) {
+      return;
+    }
     const { posX, posY } = this.guessClickPosition(ev);
     const selectedConstructor = this.props.selectedElement();
     const part = new selectedConstructor();
@@ -88,7 +91,9 @@ export default class CircuitCanvas extends Component<IProps> {
 
   private handlePoleClick(ev: Konva.KonvaEventObject<Event>) {
     const targetGroup = ev.target.getParent();
-    const target = Array.from(targetGroup.getChildren()).find(shape => shape.name() === PartName.Pole) as Konva.Circle;
+    const target = Array.from(targetGroup.getChildren()).find(
+      shape => shape.name() === PartName.Pole,
+    ) as Konva.Circle;
     ev.cancelBubble = true;
     if (this.selectedPole) {
       this.circuit.addConnection(this.selectedPole.id(), target.id());
