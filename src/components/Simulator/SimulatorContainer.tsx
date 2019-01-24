@@ -2,24 +2,21 @@ import React, { Component } from "react";
 import CircuitCanvas from "./CircuitCanvas";
 import PartSelector from "./PartSelector";
 import Circuit from "./Circuit/Circuit";
-import Part from "./Parts/Part";
-import VoltageSource from "./Parts/VoltageSource";
 import { SomePart } from "./Parts";
 
-export default class SimulatorContainer extends Component {
+export default class SimulatorContainer extends Component<{}, { selectedPart: SomePart }> {
   circuit: Circuit;
-  private _selectedPart: SomePart;
 
   constructor(props: {}) {
     super(props);
     this.circuit = new Circuit();
-    this._selectedPart = null;
+    this.state = { selectedPart: null };
   }
 
   render() {
     return (
       <div>
-        <PartSelector changeSelectedPart={this.changedSelectedElement} />
+        <PartSelector changeSelectedPart={this.changedSelectedElement} selectedElement={this.getSelectedPart} />
         <CircuitCanvas circuit={this.circuit} selectedElement={this.getSelectedPart} />
       </div>
 
@@ -27,10 +24,10 @@ export default class SimulatorContainer extends Component {
   }
 
   getSelectedPart = () => {
-    return this._selectedPart;
+    return this.state.selectedPart;
   }
 
-  private changedSelectedElement = (part: SomePart) => {
-    this._selectedPart = part;
+  private changedSelectedElement = (selectedPart: SomePart) => {
+    this.setState({ selectedPart });
   }
 }

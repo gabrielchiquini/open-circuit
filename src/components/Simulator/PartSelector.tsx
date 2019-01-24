@@ -2,32 +2,56 @@ import React, { Component } from 'react';
 import { SomePart } from './Parts';
 import { PARTS } from './Parts';
 import { ASSET_DIR } from './Circuit/util';
-import './PartSelector.css';
+import './PartSelector.scss';
 
 interface IPropsType {
   changeSelectedPart: (part: SomePart) => void;
+  selectedElement: () => SomePart;
 }
 
-export default class PartSelector extends Component<IPropsType> {
+interface IStateType {
+  visible: boolean;
+}
+
+export default class PartSelector extends Component<IPropsType, IStateType> {
   constructor(props: IPropsType) {
     super(props);
     props.changeSelectedPart(PARTS[0]);
+    this.state = { visible: true };
   }
 
   render() {
+    const selectedPart = this.props.selectedElement() || PARTS[0];
     return (
-      <div className="circuit-parts">
-        {PARTS.map(part => {
-          return (
-            <div className="part-card" key={part.name} onClick={_ => this.props.changeSelectedPart(part)}>
-              <img
-                src={`${ASSET_DIR + part.name}.svg`}
-                className="part-image"
-              />
-            </div>
-          );
-        })}
+      <div>
+        <div className="circuit-parts m-2" hidden={!this.state.visible}>
+          {PARTS.map(part => {
+            const clazz = ['part-card', 'mr-3'];
+            if (selectedPart.name === part.name) {
+              clazz.push('selected');
+            }
+            return (
+              <div
+                className={clazz.join(' ')}
+                key={part.name}
+                onClick={_ => this.props.changeSelectedPart(part)}
+              >
+                <img
+                  src={`${ASSET_DIR + part.name}.svg`}
+                  className="part-image"
+                />
+              </div>
+            );
+          })}
+        </div>
+        <div className="selector-toggle" onClick={this.toggle}>
+          <i className={'fa fa-angle-' + ( this.state.visible ? 'up' : 'down' )} />
+        </div>
       </div>
     );
+  }
+
+  toggle = () => {
+    this.setState({ visible: !this.state.visible });
   }
 }

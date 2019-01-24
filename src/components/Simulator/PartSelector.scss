@@ -1,0 +1,28 @@
+.circuit-parts {
+  display: flex;
+  flex-direction: row;
+}
+
+.part-card {
+  display: inline-flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+.selected {
+  background-color: red;
+}
+
+$part-size: 3.5rem;
+
+.part-image {
+  max-height: $part-size;
+  max-width: $part-size;
+}
+
+.selector-toggle {
+  position: fixed;
+  top: $part-size / 2;
+  right: $part-size / 2;
+  z-index: 1000;
+}
