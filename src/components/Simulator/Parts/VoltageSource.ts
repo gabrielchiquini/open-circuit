@@ -2,20 +2,33 @@ import Part from './Part';
 import IDimension from '../../../util/IDimension';
 import Konva from 'konva';
 import { getNodeCenterX } from './util/PartUtil';
+import _image from '../../../assets/images/VoltageSource.svg';
 
 const DEFAULT_VOLTAGE = 5;
 
 export default class VoltageSource extends Part {
+  static get imageSrc() {
+    return _image;
+  }
+
   voltage = DEFAULT_VOLTAGE;
   constructor() {
     super(2);
   }
 
-  get dimension(): IDimension {
+  get image(): string {
+    return _image;
+  }
+
+  protected get dimension(): IDimension {
     return {
       width: 2,
       height: 5,
     };
+  }
+
+  protected get imageSrc() {
+    return VoltageSource.imageSrc;
   }
 
   protected definePoles(

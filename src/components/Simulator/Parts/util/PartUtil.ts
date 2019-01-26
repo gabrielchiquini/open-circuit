@@ -49,10 +49,6 @@ export function partRect(dimension: IDimension, group: Group, id: string) {
   return shape;
 }
 
-export function getAsset(name: string): Promise<HTMLImageElement> {
-  return getImage(ASSET_DIR + name + '.svg');
-}
-
 export function getNodeCenterX(node: Konva.Node): number {
   const dimension = getDimension(node);
   return node.x() + dimension.width / 2;

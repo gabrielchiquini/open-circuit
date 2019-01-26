@@ -1,24 +1,27 @@
-import uuid from "uuid/v4";
-import Konva from "konva";
+import uuid from 'uuid/v4';
+import Konva from 'konva';
 import {
   partRect,
   centerPositionY,
   convertDimension,
-  getAsset,
   getPoleShapes,
   centerPositionX,
-} from "./util/PartUtil";
-import IDimension from "../../../util/IDimension";
-import { scaleHigherDimension } from "../../../util/imageUtil";
+} from './util/PartUtil';
+import IDimension from '../../../util/IDimension';
+import { scaleHigherDimension, getImage } from '../../../util/imageUtil';
 
 export default abstract class Part {
+  static get imageSrc(): string {
+    throw new Error('Method not implemented');
+  }
+
   _node: Promise<Konva.Group>;
   protected uids: string[];
   private _id: string;
 
   constructor(public poles: number) {
     if (poles < 1) {
-      throw new RangeError("All parts must have at least one pole");
+      throw new RangeError('All parts must have at least one pole');
     }
     this.uids = [];
     this._id = uuid();
@@ -32,11 +35,16 @@ export default abstract class Part {
     return this.uids.includes(pole);
   }
 
+  protected abstract get imageSrc(): string;
   protected abstract get dimension(): IDimension;
-  protected abstract definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Group[]): void;
+  protected abstract definePoles(
+    shape: Konva.Rect,
+    group: Konva.Group,
+    poleShapes: Konva.Group[],
+  ): void;
 
   protected async getImage() {
-    const image = await getAsset(this.constructor.name);
+    const image = await getImage(this.imageSrc);
     const realDimension = convertDimension(this.dimension);
     scaleHigherDimension(image, realDimension);
     return image;

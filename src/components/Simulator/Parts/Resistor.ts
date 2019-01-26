@@ -2,10 +2,14 @@ import Konva from 'konva';
 import Part from './Part';
 import IDimension from '../../../util/IDimension';
 import { calcGroupDimension } from '../Circuit/util';
+import _image from '../../../assets/images/Resistor.svg';
 
 const defaultResistance = 1e3;
 
 export default class Resistor extends Part {
+  static get imageSrc() {
+    return _image;
+  }
   resistance: number;
 
   constructor() {
@@ -19,6 +23,15 @@ export default class Resistor extends Part {
       height: 2,
     };
   }
+
+  protected get imageSrc() {
+    return Resistor.imageSrc;
+  }
+
+  protected get image() {
+    return _image;
+  }
+
   protected definePoles(
     shape: Konva.Rect,
     group: Konva.Group,
