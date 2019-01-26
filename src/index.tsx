@@ -9,7 +9,7 @@ import SimulatorContainer from './components/Simulator/SimulatorContainer';
 const startApp = () => {
   ReactDOM.render(
       <Router>
-        <Route path="/" exact component={SimulatorContainer} />
+        <Route path="/" component={SimulatorContainer} />
       </Router>
     , document.getElementById('root'));
 };
