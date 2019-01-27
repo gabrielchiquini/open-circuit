@@ -1,0 +1,91 @@
+import Konva from 'konva';
+import {
+  AREA_UNIT,
+  getVerticalLine,
+  getHorizontalLine,
+  calcGroupDimension,
+  correctPosition,
+  calculateCenter,
+  CIRCUIT_COLOR,
+} from './Circuit/util';
+
+export default class NodeManager {
+  canvas: Konva.Stage;
+  container: HTMLDivElement;
+  circuitLayer: Konva.Layer<Konva.Node>;
+  constructor(canvas: Konva.Stage) {
+    this.canvas = canvas;
+  }
+
+  async setupKonva(): Promise<void> {
+    const baseLayer = new Konva.Layer();
+    this.setupCircuitLayer();
+    this.canvas.add(baseLayer, this.circuitLayer);
+
+    await this.setupBackground(baseLayer);
+    this.canvas.draw();
+  }
+
+  addNode(node: Konva.Node) {
+    this.circuitLayer.add(node);
+    this.canvas.batchDraw();
+  }
+
+  addPart(node: Konva.Group<Konva.Node>, posX: number, posY: number): any {
+    this.setupPartPosition(node, posX, posY);
+    this.addNode(node);
+  }
+
+  setupPartPosition(node: Konva.Group, posX: number, posY: number) {
+    const groupDimension = calcGroupDimension(node);
+    const xPosition = correctPosition(
+      calculateCenter(groupDimension.width, posX),
+      this.width(),
+    );
+    const yPosition = correctPosition(
+      calculateCenter(groupDimension.height, posY),
+      this.heigth(),
+    );
+    node.x(xPosition);
+    node.y(yPosition);
+  }
+
+  addConnection(target: Konva.Circle, selectedPole: Konva.Circle): void {
+    const position1 = selectedPole.getAbsolutePosition();
+    const position2 = target.getAbsolutePosition();
+    const line = new Konva.Line({
+      points: [position1.x, position1.y, position2.x, position2.y],
+      stroke: CIRCUIT_COLOR,
+      strokeWidth: 3,
+      tension: 1,
+    });
+    selectedPole.fill(CIRCUIT_COLOR);
+    target.fill(CIRCUIT_COLOR);
+    this.addNode(line);
+  }
+
+  selectPole(target: Konva.Circle): void {
+    target.fill('red');
+    target.draw();
+  }
+
+  private setupCircuitLayer(): void {
+    this.circuitLayer = new Konva.Layer();
+  }
+  private setupBackground(baseLayer: Konva.Layer) {
+    for (let i = 0; i < this.canvas.width(); i += AREA_UNIT) {
+      baseLayer.add(getVerticalLine(i, this.canvas));
+    }
+    for (let i = 0; i < this.canvas.height(); i += AREA_UNIT) {
+      baseLayer.add(getHorizontalLine(i, this.canvas));
+    }
+  }
+
+  private width(): number {
+    return this.canvas.width();
+  }
+
+  private heigth(): number {
+    return this.canvas.height();
+  }
+}

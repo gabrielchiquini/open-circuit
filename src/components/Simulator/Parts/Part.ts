@@ -35,6 +35,10 @@ export default abstract class Part {
     return this.uids.includes(pole);
   }
 
+  getNode(): Promise<Konva.Group> {
+    return this._node;
+  }
+
   protected abstract get imageSrc(): string;
   protected abstract get dimension(): IDimension;
   protected abstract definePoles(
@@ -67,9 +71,5 @@ export default abstract class Part {
 
   get id() {
     return this._id;
-  }
-
-  get konvaNode(): Promise<Konva.Group> {
-    return this._node;
   }
 }
