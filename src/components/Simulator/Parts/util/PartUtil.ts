@@ -2,8 +2,7 @@ import Konva, { Circle, Group, Rect } from 'konva';
 import PartName from './PartName';
 import {
   CIRCUIT_COLOR,
-  ASSET_DIR,
-  calcGroupDimension,
+  realDimension,
 } from '../../Circuit/util';
 import { getImage } from '../../../../util/imageUtil';
 import IDimension from '../../../../util/IDimension';
@@ -36,11 +35,11 @@ export function getPoleShapes(ids: string[]): Konva.Group[] {
 }
 
 export function partRect(dimension: IDimension, group: Group, id: string) {
-  const realDimension = convertDimension(dimension);
+  const absoluteDimension = convertDimension(dimension);
   const shape = new Rect({
     id,
-    width: realDimension.width,
-    height: realDimension.height,
+    width: absoluteDimension.width,
+    height: absoluteDimension.height,
     name: PartName.Part,
     x: group.x(),
     y: group.y(),
@@ -50,12 +49,12 @@ export function partRect(dimension: IDimension, group: Group, id: string) {
 }
 
 export function getNodeCenterX(node: Konva.Node): number {
-  const dimension = getDimension(node);
+  const dimension = realDimension(node);
   return node.x() + dimension.width / 2;
 }
 
 export function getNodeCenterY(node: Konva.Node): number {
-  const dimension = getDimension(node);
+  const dimension = realDimension(node);
   return node.y() + dimension.height / 2;
 }
 
@@ -73,19 +72,6 @@ export function centerPositionX(
 ): number {
   const centerPoint = getNodeCenterX(baseNode);
   return centerPoint - targetWidth / 2;
-}
-
-function getDimension(node: Konva.Node) {
-  let dimension: IDimension;
-  if (node instanceof Konva.Group) {
-    dimension = calcGroupDimension(node);
-  } else {
-    dimension = {
-      width: node.width(),
-      height: node.height(),
-    };
-  }
-  return dimension;
 }
 
 export function convertDimension(base: IDimension): IDimension {

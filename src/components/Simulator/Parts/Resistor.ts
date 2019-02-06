@@ -1,8 +1,8 @@
 import Konva from 'konva';
 import Part from './Part';
 import IDimension from '../../../util/IDimension';
-import { calcGroupDimension } from '../Circuit/util';
 import _image from '../../../assets/images/Resistor.svg';
+import { realDimension } from '../Circuit/util';
 
 const defaultResistance = 1e3;
 
@@ -39,7 +39,7 @@ export default class Resistor extends Part {
   ) {
     const leftPole = poleShapes[0];
     const rightPole = poleShapes[1];
-    const leftDimension = calcGroupDimension(leftPole);
+    const leftDimension = realDimension(leftPole);
     const correction = leftDimension.width / 2;
     leftPole.x(-correction);
     rightPole.x(shape.width() - correction);

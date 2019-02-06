@@ -3,11 +3,13 @@ import {
   AREA_UNIT,
   getVerticalLine,
   getHorizontalLine,
-  calcGroupDimension,
   correctPosition,
   calculateCenter,
   CIRCUIT_COLOR,
+  hasIntersection,
+  realDimension,
 } from './Circuit/util';
+import PartName from './Parts/util/PartName';
 
 export default class NodeManager {
   canvas: Konva.Stage;
@@ -32,12 +34,14 @@ export default class NodeManager {
   }
 
   addPart(node: Konva.Group<Konva.Node>, posX: number, posY: number): any {
-    this.setupPartPosition(node, posX, posY);
-    this.addNode(node);
+    this.definePartPosition(node, posX, posY);
+    if (this.canInsert(node)) {
+      this.addNode(node);
+    }
   }
 
-  setupPartPosition(node: Konva.Group, posX: number, posY: number) {
-    const groupDimension = calcGroupDimension(node);
+  definePartPosition(node: Konva.Group, posX: number, posY: number) {
+    const groupDimension = realDimension(node);
     const xPosition = correctPosition(
       calculateCenter(groupDimension.width, posX),
       this.width(),
@@ -87,5 +91,12 @@ export default class NodeManager {
 
   private heigth(): number {
     return this.canvas.height();
+  }
+
+  private canInsert(node: Konva.Node): any {
+    const interceptor = Array.from(this.circuitLayer.getChildren()).find(existingPart => {
+      return hasIntersection(existingPart, node);
+    });
+    return typeof interceptor === 'undefined';
   }
 }
