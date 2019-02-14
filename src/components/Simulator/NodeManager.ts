@@ -8,8 +8,8 @@ import {
   CIRCUIT_COLOR,
   hasIntersection,
   realDimension,
+  realBounds,
 } from './Circuit/util';
-import PartName from './Parts/util/PartName';
 
 export default class NodeManager {
   canvas: Konva.Stage;
@@ -43,11 +43,13 @@ export default class NodeManager {
   definePartPosition(node: Konva.Group, posX: number, posY: number) {
     const groupDimension = realDimension(node);
     const xPosition = correctPosition(
-      calculateCenter(groupDimension.width, posX),
+      posX,
+      groupDimension.width,
       this.width(),
     );
     const yPosition = correctPosition(
-      calculateCenter(groupDimension.height, posY),
+      posY,
+      groupDimension.height,
       this.heigth(),
     );
     node.x(xPosition);

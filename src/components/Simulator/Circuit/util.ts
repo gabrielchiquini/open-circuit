@@ -6,6 +6,7 @@ export const CIRCUIT_MESH = ASSET_DIR + 'mesh.svg';
 export const CIRCUIT_COLOR = 'black';
 export const BACKGROUND_COLOR = 'lightgrey';
 export const AREA_UNIT = 20;
+const MARGIN = AREA_UNIT;
 
 interface IBounds {
   minX: number;
@@ -14,9 +15,13 @@ interface IBounds {
   maxY: number;
 }
 
-
-export function correctPosition(param: number, bound: number): number {
-  const position = Math.max(param, Math.min(param, bound));
+export function correctPosition(
+  position: number,
+  dimension: number,
+  upperBound: number,
+): number {
+  const center = position - dimension / 2;
+  position = Math.max(MARGIN, Math.min(center, upperBound - dimension));
   let gridDistance = position % AREA_UNIT;
   if (gridDistance > AREA_UNIT / 2) {
     gridDistance = gridDistance - AREA_UNIT; // move to next border
@@ -70,11 +75,13 @@ export function realDimension(node: Node): IDimension {
 
 export function realBounds(node: Node): IBounds {
   const dimension = realDimension(node);
+  const minX = node.x();
+  const minY = node.y();
   return {
-    minX: node.x(),
-    minY: node.y(),
-    maxX: node.x() + dimension.width,
-    maxY: node.y() + dimension.height,
+    minX,
+    minY,
+    maxX: minX + dimension.width,
+    maxY: minY + dimension.height,
   };
 }
 
