@@ -1,10 +1,6 @@
 import Konva, { Circle, Group, Rect } from 'konva';
 import PartName from './PartName';
-import {
-  CIRCUIT_COLOR,
-  realDimension,
-} from '../../Circuit/util';
-import { getImage } from '../../../../util/imageUtil';
+import { CIRCUIT_COLOR, realDimension } from '../../Circuit/util';
 import IDimension from '../../../../util/IDimension';
 import { AREA_UNIT as UNIT } from '../../Circuit/util';
 
@@ -20,7 +16,7 @@ export function getPoleShapes(ids: string[]): Konva.Group[] {
     const rect = new Konva.Rect({
       width,
       height,
-      stroke: CIRCUIT_COLOR,
+      stroke: 'transparent',
     });
     const circle = new Circle({
       radius: POLE_RADIUS,
@@ -34,10 +30,9 @@ export function getPoleShapes(ids: string[]): Konva.Group[] {
   });
 }
 
-export function partRect(dimension: IDimension, group: Group, id: string) {
+export function partRect(dimension: IDimension, group: Group) {
   const absoluteDimension = convertDimension(dimension);
   const shape = new Rect({
-    id,
     width: absoluteDimension.width,
     height: absoluteDimension.height,
     name: PartName.Part,
@@ -58,18 +53,12 @@ export function getNodeCenterY(node: Konva.Node): number {
   return node.y() + dimension.height / 2;
 }
 
-export function centerPositionY(
-  baseNode: Konva.Node,
-  targetHeight: number,
-): number {
+export function centerPositionY(baseNode: Konva.Node, targetHeight: number): number {
   const centerPoint = getNodeCenterY(baseNode);
   return centerPoint - targetHeight / 2;
 }
 
-export function centerPositionX(
-  baseNode: Konva.Node,
-  targetWidth: number,
-): number {
+export function centerPositionX(baseNode: Konva.Node, targetWidth: number): number {
   const centerPoint = getNodeCenterX(baseNode);
   return centerPoint - targetWidth / 2;
 }

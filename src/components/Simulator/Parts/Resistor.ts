@@ -3,18 +3,13 @@ import Part from './Part';
 import IDimension from '../../../util/IDimension';
 import _image from '../../../assets/images/Resistor.svg';
 import { realDimension } from '../Circuit/util';
+import IPartProperties from '../IProperty';
 
 const defaultResistance = 1e3;
 
 export default class Resistor extends Part {
   static get imageSrc() {
     return _image;
-  }
-  resistance: number;
-
-  constructor() {
-    super(2);
-    this.resistance = defaultResistance;
   }
 
   protected get dimension(): IDimension {
@@ -31,12 +26,23 @@ export default class Resistor extends Part {
   protected get image() {
     return _image;
   }
+  resistance: number;
 
-  protected definePoles(
-    shape: Konva.Rect,
-    group: Konva.Group,
-    poleShapes: Konva.Group[],
-  ) {
+  constructor() {
+    super(2);
+    this.resistance = defaultResistance;
+  }
+  protected defineProperties(): IPartProperties {
+    return {
+      resistance: {
+        label: 'Resistance',
+        value: 1000,
+        unit: 'Ohm',
+      },
+    };
+  }
+
+  protected definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Group[]) {
     const leftPole = poleShapes[0];
     const rightPole = poleShapes[1];
     const leftDimension = realDimension(leftPole);

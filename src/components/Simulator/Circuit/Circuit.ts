@@ -1,4 +1,6 @@
-import Part from "../Parts/Part";
+import Part from '../Parts/Part';
+import IPartProperties from '../IProperty';
+import _ from 'lodash';
 
 export default class Circuit {
   private parts: Part[];
@@ -31,4 +33,12 @@ export default class Circuit {
     });
   }
 
+  getPartProperties(id: string): IPartProperties {
+    const properties = this.parts.find(part => part.id === id).properties;
+    return _.cloneDeep(properties);
+  }
+
+  setPartProperties(id: string, properties: IPartProperties): void {
+    this.parts.find(part => part.id === id).properties = properties;
+  }
 }

@@ -4,11 +4,11 @@ import {
   getVerticalLine,
   getHorizontalLine,
   correctPosition,
-  calculateCenter,
   CIRCUIT_COLOR,
   hasIntersection,
   realDimension,
-  realBounds,
+  SELECTION_COLOR,
+  STROKE_WIDTH,
 } from './Circuit/util';
 
 export default class NodeManager {
@@ -62,7 +62,7 @@ export default class NodeManager {
     const line = new Konva.Line({
       points: [position1.x, position1.y, position2.x, position2.y],
       stroke: CIRCUIT_COLOR,
-      strokeWidth: 3,
+      strokeWidth: STROKE_WIDTH,
       tension: 1,
     });
     selectedPole.fill(CIRCUIT_COLOR);
@@ -71,7 +71,7 @@ export default class NodeManager {
   }
 
   selectPole(target: Konva.Circle): void {
-    target.fill('red');
+    target.fill(SELECTION_COLOR);
     target.draw();
   }
 

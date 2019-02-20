@@ -1,11 +1,13 @@
-import { Group, Line, Stage, Node, Vector2d } from 'konva';
+import { Group, Line, Stage, Node, Vector2d, Util } from 'konva';
 import IDimension from '../../../util/IDimension';
 
 export const ASSET_DIR = 'assets/circuit/';
 export const CIRCUIT_MESH = ASSET_DIR + 'mesh.svg';
 export const CIRCUIT_COLOR = 'black';
 export const BACKGROUND_COLOR = 'lightgrey';
+export const SELECTION_COLOR = '#eee';
 export const AREA_UNIT = 20;
+export const STROKE_WIDTH = 1;
 const MARGIN = AREA_UNIT;
 
 interface IBounds {
@@ -51,7 +53,6 @@ function getBackgroundLine(points: number[]) {
 }
 
 export function realDimension(node: Node): IDimension {
-  // debugger
   if (node instanceof Group) {
     let minX = 0;
     let minY = 0;
@@ -88,12 +89,24 @@ export function realBounds(node: Node): IBounds {
 export function hasIntersection(p1: Node, p2: Node) {
   const boundsP1 = realBounds(p1);
   const boundsP2 = realBounds(p2);
-  return (
-    inside(boundsP1, boundsP2.minX, boundsP2.minY) ||
-    inside(boundsP1, boundsP2.minX, boundsP2.maxY) ||
-    inside(boundsP1, boundsP2.maxX, boundsP2.minY) ||
-    inside(boundsP1, boundsP2.maxX, boundsP2.maxY)
-  );
+  const rect1 = rectFromBounds(boundsP1);
+  const rect2 = rectFromBounds(boundsP2);
+  return (Util as any).haveIntersection(rect1, rect2);
+  // return (
+  //   inside(boundsP1, boundsP2.minX, boundsP2.minY) ||
+  //   inside(boundsP1, boundsP2.minX, boundsP2.maxY) ||
+  //   inside(boundsP1, boundsP2.maxX, boundsP2.minY) ||
+  //   inside(boundsP1, boundsP2.maxX, boundsP2.maxY)
+  // );
+}
+
+function rectFromBounds(bounds: IBounds) {
+  return {
+    x: bounds.minX,
+    y: bounds.minY,
+    width: bounds.maxX - bounds.minX,
+    height: bounds.maxY - bounds.minY,
+  };
 }
 
 function inside(bounds: IBounds, x: number, y: number) {

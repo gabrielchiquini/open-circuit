@@ -3,17 +3,13 @@ import IDimension from '../../../util/IDimension';
 import Konva from 'konva';
 import { getNodeCenterX } from './util/PartUtil';
 import _image from '../../../assets/images/VoltageSource.svg';
+import IPartProperties from '../IProperty';
 
 const DEFAULT_VOLTAGE = 5;
 
 export default class VoltageSource extends Part {
   static get imageSrc() {
     return _image;
-  }
-
-  voltage = DEFAULT_VOLTAGE;
-  constructor() {
-    super(2);
   }
 
   get image(): string {
@@ -31,11 +27,21 @@ export default class VoltageSource extends Part {
     return VoltageSource.imageSrc;
   }
 
-  protected definePoles(
-    shape: Konva.Rect,
-    group: Konva.Group,
-    poleShapes: Konva.Group[],
-  ): void {
+  voltage = DEFAULT_VOLTAGE;
+  constructor() {
+    super(2);
+  }
+  protected defineProperties(): IPartProperties {
+    return {
+      voltage: {
+        label: 'Voltage',
+        value: DEFAULT_VOLTAGE,
+        unit: 'V',
+      },
+    };
+  }
+
+  protected definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Group[]): void {
     const upperPole = poleShapes[0];
     const lowerPole = poleShapes[1];
     const center = getNodeCenterX(shape);

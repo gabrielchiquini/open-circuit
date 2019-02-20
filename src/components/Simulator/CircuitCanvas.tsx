@@ -4,13 +4,24 @@ import { SomePart } from './Parts';
 import Circuit from './Circuit/Circuit';
 import PartName from './Parts/util/PartName';
 import NodeManager from './NodeManager';
+import PropertiesEditor from './PropertiesEditor';
+import IPartProperties from './IProperty';
+import _ from 'lodash';
 
 interface IProps {
   circuit: Circuit;
   selectedElement: () => SomePart;
 }
 
-export default class CircuitCanvas extends Component<IProps> {
+interface IState {
+  propertiesEditorFields: IPartProperties;
+  editingProperties: boolean;
+  width: number;
+  height: number;
+}
+
+export default class CircuitCanvas extends Component<IProps, IState> {
+  private editingPartId: string;
   private circuit: Circuit;
   private container: HTMLDivElement;
   private canvas: Konva.Stage;
@@ -20,22 +31,44 @@ export default class CircuitCanvas extends Component<IProps> {
   constructor(props: Readonly<IProps>) {
     super(props);
     this.circuit = props.circuit;
+    this.state = {
+      propertiesEditorFields: {},
+      editingProperties: false,
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+
+    window.addEventListener('resize', () => {
+      this.setState({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    });
   }
 
   render() {
     return (
-      <div
-        className="circuit-area"
-        id="circuit-area"
-        ref={div => (this.container = div)}
-        style={{
-          width: window.innerWidth,
-          height: window.innerHeight,
-          overflow: 'scroll',
-        }}
-      />
+      <div>
+        <div
+          className="circuit-area"
+          id="circuit-area"
+          ref={div => (this.container = div)}
+          style={{
+            width: this.state.width,
+            height: this.state.height,
+            overflow: 'scroll',
+          }}
+        />
+        <PropertiesEditor
+          fields={this.state.propertiesEditorFields}
+          returnProperties={this.returnProperties}
+          visible={this.state.editingProperties}
+          editingHide={this.editingHide}
+        />
+      </div>
     );
   }
+
   componentDidMount() {
     this.canvas = new Konva.Stage({
       container: 'circuit-area',
@@ -43,11 +76,7 @@ export default class CircuitCanvas extends Component<IProps> {
       height: 1000,
     });
     this.nodeManager = new NodeManager(this.canvas);
-    this.nodeManager
-      .setupKonva()
-      .then(_ =>
-        this.canvas.on('click tap', ev => this.addSelectedElement(ev)),
-      );
+    this.nodeManager.setupKonva().then(_ => this.canvas.on('click tap', ev => this.addSelectedElement(ev)));
   }
 
   addEvents(node: Konva.Group): any {
@@ -56,15 +85,36 @@ export default class CircuitCanvas extends Component<IProps> {
         childNode.on('click touchend', ev => {
           this.handlePoleClick(ev);
         });
+      } else if (childNode.name() === PartName.Part) {
+        childNode.on('click touchend', ev => {
+          this.handlePartClick(ev);
+        });
       }
     });
   }
 
+  editingHide = () => {
+    this.setState({ propertiesEditorFields: {}, editingProperties: false });
+  }
+
+  returnProperties = (properties: IPartProperties) => {
+    this.setState({ propertiesEditorFields: {}, editingProperties: false });
+    if (properties !== null) {
+      this.circuit.setPartProperties(this.editingPartId, properties);
+    }
+  }
+
+  private handlePartClick(ev: Konva.KonvaEventObject<Event>): any {
+    this.editingPartId = ev.target.getParent().id();
+    const properties = this.circuit.getPartProperties(this.editingPartId);
+    if (properties) {
+      this.setState({ propertiesEditorFields: properties, editingProperties: true });
+    }
+  }
+
   private handlePoleClick(ev: Konva.KonvaEventObject<Event>) {
     const targetGroup = ev.target.getParent();
-    const target = Array.from(targetGroup.getChildren()).find(
-      shape => shape.name() === PartName.Pole,
-    ) as Konva.Circle;
+    const target = Array.from(targetGroup.getChildren()).find(shape => shape.name() === PartName.Pole) as Konva.Circle;
     ev.cancelBubble = true;
     if (this.selectedPole) {
       this.circuit.addConnection(this.selectedPole.id(), target.id());
@@ -94,9 +144,7 @@ export default class CircuitCanvas extends Component<IProps> {
 
   private isMouseEvent(event: Event): event is MouseEvent {
     const anyEvent = event as any;
-    return (
-      typeof anyEvent.layerX === 'number' && typeof anyEvent.layerY === 'number'
-    );
+    return typeof anyEvent.layerX === 'number' && typeof anyEvent.layerY === 'number';
   }
 
   private async addSelectedElement(ev: KonvaEventObject<Event>): Promise<void> {
