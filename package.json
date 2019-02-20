@@ -18,9 +18,11 @@
     "cordova-plugin-whitelist": "^1.3.3",
     "jquery": "^3.3.1",
     "konva": "^2.6.0",
+    "lodash": "^4.17.11",
     "node-sass": "^4.11.0",
     "popper.js": "^1.14.6",
     "react": "^16.7.0",
+    "react-bootstrap": "^1.0.0-beta.5",
     "react-dom": "^16.7.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.2",
@@ -58,5 +60,8 @@
       "browser",
       "android"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.121"
   }
 }
