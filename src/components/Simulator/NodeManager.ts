@@ -1,4 +1,4 @@
-import Konva from 'konva';
+import Konva, { Line } from 'konva';
 import {
   AREA_UNIT,
   getVerticalLine,
@@ -42,16 +42,8 @@ export default class NodeManager {
 
   definePartPosition(node: Konva.Group, posX: number, posY: number) {
     const groupDimension = realDimension(node);
-    const xPosition = correctPosition(
-      posX,
-      groupDimension.width,
-      this.width(),
-    );
-    const yPosition = correctPosition(
-      posY,
-      groupDimension.height,
-      this.heigth(),
-    );
+    const xPosition = correctPosition(posX, groupDimension.width, this.width());
+    const yPosition = correctPosition(posY, groupDimension.height, this.heigth());
     node.x(xPosition);
     node.y(yPosition);
   }
@@ -96,9 +88,11 @@ export default class NodeManager {
   }
 
   private canInsert(node: Konva.Node): any {
-    const interceptor = Array.from(this.circuitLayer.getChildren()).find(existingPart => {
-      return hasIntersection(existingPart, node);
-    });
+    const interceptor = Array.from(this.circuitLayer.getChildren())
+      .filter(existingPart => !(existingPart instanceof Line))
+      .find(existingPart => {
+        return hasIntersection(existingPart, node);
+      });
     return typeof interceptor === 'undefined';
   }
 }
