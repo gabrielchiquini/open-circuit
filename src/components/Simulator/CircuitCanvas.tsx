@@ -76,7 +76,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
       height: 1000,
     });
     this.nodeManager = new NodeManager(this.canvas);
-    this.nodeManager.setupKonva().then(_ => this.canvas.on('click tap', ev => this.addSelectedElement(ev)));
+    this.nodeManager.setupKonva().then(__ => this.canvas.on('click tap', ev => this.addSelectedElement(ev)));
   }
 
   addEvents(node: Konva.Group): any {
