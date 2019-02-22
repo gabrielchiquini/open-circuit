@@ -3,11 +3,12 @@ import Part from './Part';
 import IDimension from '../../../util/IDimension';
 import _image from '../../../assets/images/Resistor.svg';
 import { realDimension } from '../Circuit/util';
-import IPartProperties from '../IProperty';
+import IPartProperties from '../IPartProperties';
 
 const defaultResistance = 1e3;
 
 export default class Resistor extends Part {
+  readonly mainProperty = 'resistance';
   static get imageSrc() {
     return _image;
   }
@@ -37,7 +38,7 @@ export default class Resistor extends Part {
       resistance: {
         label: 'Resistance',
         value: 1000,
-        unit: 'Ohm',
+        unit: '\u2126',
       },
     };
   }

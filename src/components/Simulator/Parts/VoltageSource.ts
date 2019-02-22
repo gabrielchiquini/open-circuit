@@ -3,11 +3,12 @@ import IDimension from '../../../util/IDimension';
 import Konva from 'konva';
 import { getNodeCenterX } from './util/PartUtil';
 import _image from '../../../assets/images/VoltageSource.svg';
-import IPartProperties from '../IProperty';
+import IPartProperties from '../IPartProperties';
 
 const DEFAULT_VOLTAGE = 5;
 
 export default class VoltageSource extends Part {
+  readonly mainProperty = 'voltage';
   static get imageSrc() {
     return _image;
   }

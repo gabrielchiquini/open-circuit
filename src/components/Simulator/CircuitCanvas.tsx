@@ -5,7 +5,7 @@ import Circuit from './Circuit/Circuit';
 import PartName from './Parts/util/PartName';
 import NodeManager from './NodeManager';
 import PropertiesEditor from './PropertiesEditor';
-import IPartProperties from './IProperty';
+import IPartProperties from './IPartProperties';
 import _ from 'lodash';
 
 interface IProps {
@@ -101,6 +101,8 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     this.setState({ propertiesEditorFields: {}, editingProperties: false });
     if (properties !== null) {
       this.circuit.setPartProperties(this.editingPartId, properties);
+      const mainProperty = this.circuit.getPartMainProperty(this.editingPartId);
+      this.nodeManager.updatePartProperties(this.editingPartId, properties[mainProperty]);
     }
   }
 

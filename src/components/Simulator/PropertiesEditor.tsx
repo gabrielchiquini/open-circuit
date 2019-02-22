@@ -1,6 +1,6 @@
 import React, { Component, ChangeEvent, FormEvent } from 'react';
 import './PartSelector.scss';
-import IPartProperties from './IProperty';
+import IPartProperties from './IPartProperties';
 import { Modal, Button } from 'react-bootstrap';
 
 interface IPropsType {

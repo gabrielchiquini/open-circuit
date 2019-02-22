@@ -3,7 +3,7 @@ import Konva from 'konva';
 import { partRect, centerPositionY, convertDimension, getPoleShapes, centerPositionX } from './util/PartUtil';
 import IDimension from '../../../util/IDimension';
 import { scaleHigherDimension, getImage } from '../../../util/imageUtil';
-import IPartProperties from '../IProperty';
+import IPartProperties from '../IPartProperties';
 import PartName from './util/PartName';
 
 export default abstract class Part {
@@ -17,6 +17,7 @@ export default abstract class Part {
 
   protected abstract get imageSrc(): string;
   protected abstract get dimension(): IDimension;
+  abstract get mainProperty(): string;
   properties: IPartProperties;
 
   _node: Promise<Konva.Group>;
@@ -28,8 +29,8 @@ export default abstract class Part {
       throw new RangeError('All parts must have at least one pole');
     }
     this.setUids(poles);
-    this._node = this.createNode();
     this.properties = this.defineProperties();
+    this._node = this.createNode();
   }
 
   hasPole(pole: string) {
@@ -70,7 +71,12 @@ export default abstract class Part {
       x: centerPositionX(shape, image.width),
       y: centerPositionY(shape, image.height),
     });
-    group.add(shape, imageNode);
+    const mainProperty = this.properties[this.mainProperty];
+    const propertyLabel = new Konva.Text({
+      text: `${mainProperty.value} ${mainProperty.unit}`,
+      id: this.id + '-label',
+    });
+    group.add(shape, imageNode, propertyLabel);
     const poleShapes = getPoleShapes(this.uids);
     this.definePoles(shape, group, poleShapes);
     return group;

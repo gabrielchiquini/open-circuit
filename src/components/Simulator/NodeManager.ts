@@ -10,8 +10,11 @@ import {
   SELECTION_COLOR,
   STROKE_WIDTH,
 } from './Circuit/util';
+import IPartProperties from './IPartProperties';
+import IPartProperty from './IPartProperty';
 
 export default class NodeManager {
+
   canvas: Konva.Stage;
   container: HTMLDivElement;
   circuitLayer: Konva.Layer<Konva.Node>;
@@ -65,6 +68,12 @@ export default class NodeManager {
   selectPole(target: Konva.Circle): void {
     target.fill(SELECTION_COLOR);
     target.draw();
+  }
+
+  updatePartProperties(editingPartId: string, properties: IPartProperty): any {
+    const labelNode = this.canvas.find('#' + editingPartId + '-label')[0] as Konva.Text;
+    labelNode.text(`${properties.value} ${properties.unit}`);
+    this.canvas.draw();
   }
 
   private setupCircuitLayer(): void {

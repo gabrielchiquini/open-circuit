@@ -1,8 +1,9 @@
 import Part from '../Parts/Part';
-import IPartProperties from '../IProperty';
+import IPartProperties from '../IPartProperties';
 import _ from 'lodash';
 
 export default class Circuit {
+
   private parts: Part[];
   private nodes: Array<Set<string>>;
 
@@ -34,11 +35,20 @@ export default class Circuit {
   }
 
   getPartProperties(id: string): IPartProperties {
-    const properties = this.parts.find(part => part.id === id).properties;
+    const properties = this.findPart(id).properties;
     return _.cloneDeep(properties);
   }
 
   setPartProperties(id: string, properties: IPartProperties): void {
     this.parts.find(part => part.id === id).properties = properties;
   }
+
+  getPartMainProperty(id: string): string {
+    return this.findPart(id).mainProperty;
+  }
+
+  private findPart(id: string) {
+    return this.parts.find(part => part.id === id);
+  }
+
 }
