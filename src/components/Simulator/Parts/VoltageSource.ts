@@ -1,9 +1,9 @@
 import Part from './Part';
 import IDimension from '../../../util/IDimension';
 import Konva from 'konva';
-import { getNodeCenterX } from './util/PartUtil';
 import _image from '../../../assets/images/VoltageSource.svg';
 import IPartProperties from '../IPartProperties';
+import { realDimension } from '../Circuit/util';
 
 const DEFAULT_VOLTAGE = 5;
 
@@ -19,8 +19,8 @@ export default class VoltageSource extends Part {
 
   protected get dimension(): IDimension {
     return {
-      width: 2,
-      height: 5,
+      width: 5,
+      height: 2,
     };
   }
 
@@ -43,11 +43,13 @@ export default class VoltageSource extends Part {
   }
 
   protected definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Group[]): void {
-    const upperPole = poleShapes[0];
-    const lowerPole = poleShapes[1];
-    const center = getNodeCenterX(shape);
-    upperPole.y(group.y() - center);
-    lowerPole.y(group.y() + shape.height() - center);
-    group.add(lowerPole, upperPole);
+    const leftPole = poleShapes[0];
+    const rightPole = poleShapes[1];
+    const leftDimension = realDimension(leftPole);
+    const correction = leftDimension.width / 2;
+    leftPole.x(-correction);
+    rightPole.x(shape.width() - correction);
+
+    group.add(leftPole, rightPole);
   }
 }
