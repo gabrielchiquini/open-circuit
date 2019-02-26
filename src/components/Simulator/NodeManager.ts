@@ -1,4 +1,4 @@
-import Konva, { Line } from 'konva';
+import Konva, { Line, Group } from 'konva';
 import {
   AREA_UNIT,
   getVerticalLine,
@@ -10,14 +10,13 @@ import {
   SELECTION_COLOR,
   STROKE_WIDTH,
 } from './Circuit/util';
-import IPartProperties from './IPartProperties';
 import IPartProperty from './IPartProperty';
 
 export default class NodeManager {
-
   canvas: Konva.Stage;
   container: HTMLDivElement;
   circuitLayer: Konva.Layer<Konva.Node>;
+  private _editingPartId: string;
   constructor(canvas: Konva.Stage) {
     this.canvas = canvas;
   }
@@ -29,6 +28,10 @@ export default class NodeManager {
 
     await this.setupBackground(baseLayer);
     this.canvas.draw();
+  }
+
+  get editingPartId() {
+    return this._editingPartId;
   }
 
   addNode(node: Konva.Node) {
@@ -74,6 +77,29 @@ export default class NodeManager {
     const labelNode = this.canvas.find('#' + editingPartId + '-label')[0] as Konva.Text;
     labelNode.text(`${properties.value} ${properties.unit}`);
     this.canvas.draw();
+  }
+
+  selectPart(partId: string): void {
+    const part = this.canvas.find('#' + partId)[0] as Group;
+    const currentPart = this.canvas.find('#' + this._editingPartId)[0] as Group;
+    this.setImageStroke(currentPart, 'transparent');
+    if (this._editingPartId === partId) {
+      this._editingPartId = null;
+    } else {
+      this._editingPartId = partId;
+      this.setImageStroke(part, CIRCUIT_COLOR);
+    }
+    this.canvas.batchDraw();
+  }
+
+  private setImageStroke(part: Konva.Group<Konva.Node>, color: string) {
+    if (part && part.hasChildren()) {
+      part.getChildren().each((child: Konva.Node) => {
+        if (child instanceof Konva.Image) {
+          child.stroke(color);
+        }
+      });
+    }
   }
 
   private setupCircuitLayer(): void {

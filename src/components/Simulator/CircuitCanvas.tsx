@@ -21,7 +21,6 @@ interface IState {
 }
 
 export default class CircuitCanvas extends Component<IProps, IState> {
-  private editingPartId: string;
   private circuit: Circuit;
   private container: HTMLDivElement;
   private canvas: Konva.Stage;
@@ -100,15 +99,18 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   returnProperties = (properties: IPartProperties) => {
     this.setState({ propertiesEditorFields: {}, editingProperties: false });
     if (properties !== null) {
-      this.circuit.setPartProperties(this.editingPartId, properties);
-      const mainProperty = this.circuit.getPartMainProperty(this.editingPartId);
-      this.nodeManager.updatePartProperties(this.editingPartId, properties[mainProperty]);
+      this.circuit.setPartProperties(this.nodeManager.editingPartId, properties);
+      const mainProperty = this.circuit.getPartMainProperty(this.nodeManager.editingPartId);
+      this.nodeManager.updatePartProperties(this.nodeManager.editingPartId, properties[mainProperty]);
     }
   }
 
   private handlePartClick(ev: Konva.KonvaEventObject<Event>): any {
-    this.editingPartId = ev.target.getParent().id();
-    const properties = this.circuit.getPartProperties(this.editingPartId);
+    this.nodeManager.selectPart(ev.target.getParent().id());
+  }
+
+  private openEditPart() {
+    const properties = this.circuit.getPartProperties(this.nodeManager.editingPartId);
     if (properties) {
       this.setState({ propertiesEditorFields: properties, editingProperties: true });
     }
