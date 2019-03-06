@@ -13,29 +13,29 @@ import {
 import IPartProperty from './IPartProperty';
 
 export default class NodeManager {
-  get editingPartId() {
+  get selectedPart() {
     return this._selectedPart;
   }
-  canvas: Konva.Stage;
+  stage: Konva.Stage;
   container: HTMLDivElement;
   circuitLayer: Konva.Layer<Konva.Node>;
   private _selectedPart: string;
-  constructor(canvas: Konva.Stage) {
-    this.canvas = canvas;
+  constructor(stage: Konva.Stage) {
+    this.stage = stage;
   }
 
   async setupKonva(): Promise<void> {
     const baseLayer = new Konva.Layer();
     this.setupCircuitLayer();
-    this.canvas.add(baseLayer, this.circuitLayer);
+    this.stage.add(baseLayer, this.circuitLayer);
 
     await this.setupBackground(baseLayer);
-    this.canvas.draw();
+    this.stage.draw();
   }
 
   addNode(node: Konva.Node) {
     this.circuitLayer.add(node);
-    this.canvas.batchDraw();
+    this.stage.batchDraw();
   }
 
   addPart(node: Konva.Group<Konva.Node>, posX: number, posY: number): any {
@@ -74,13 +74,13 @@ export default class NodeManager {
   }
 
   updatePartProperties(editingPartId: string, properties: IPartProperty): any {
-    const labelNode = this.canvas.find('#' + editingPartId + '-label')[0] as Konva.Text;
+    const labelNode = this.stage.find('#' + editingPartId + '-label')[0] as Konva.Text;
     labelNode.text(`${properties.value} ${properties.unit}`);
-    this.canvas.draw();
+    this.stage.draw();
   }
 
   selectPart(partId: string): void {
-    const part = this.canvas.find('#' + partId)[0] as Group;
+    const part = this.stage.find('#' + partId)[0] as Group;
     const currentPart = this.getSelectedPart();
     this.setImageStroke(currentPart, 'transparent');
     if (this._selectedPart === partId) {
@@ -89,7 +89,7 @@ export default class NodeManager {
       this._selectedPart = partId;
       this.setImageStroke(part, CIRCUIT_COLOR);
     }
-    this.canvas.batchDraw();
+    this.stage.batchDraw();
   }
 
   rotatePart(poles: string[]): void {
@@ -97,17 +97,17 @@ export default class NodeManager {
     const lineMappings: Array<{ pole: Circle; relations: Circle[] }> = [];
     poles.forEach(poleId => {
       const nameForLine = 'pole-' + poleId;
-      const lines = this.canvas.find('.' + nameForLine);
+      const lines = this.stage.find('.' + nameForLine);
       const targets = lines.toArray().map(line => {
         const targetPoleId = line
           .removeName(nameForLine)
           .name()
           .replace('pole-', '');
-        return this.canvas.find('#' + targetPoleId)[0] as Circle;
+        return this.stage.find('#' + targetPoleId)[0] as Circle;
       });
       lines.each(line => line.remove());
       lineMappings.push({
-        pole: this.canvas.find('#' + poleId)[0] as Circle,
+        pole: this.stage.find('#' + poleId)[0] as Circle,
         relations: targets,
       });
     });
@@ -133,11 +133,11 @@ export default class NodeManager {
       });
     });
     selectedPart.offsetY(0);
-    this.canvas.batchDraw();
+    this.stage.batchDraw();
   }
 
   private getSelectedPart() {
-    return this.canvas.find('#' + this._selectedPart)[0] as Group;
+    return this.stage.find('#' + this._selectedPart)[0] as Group;
   }
   private setImageStroke(part: Konva.Group<Konva.Node>, color: string) {
     if (part && part.hasChildren()) {
@@ -153,20 +153,20 @@ export default class NodeManager {
     this.circuitLayer = new Konva.Layer();
   }
   private setupBackground(baseLayer: Konva.Layer) {
-    for (let i = 0; i < this.canvas.width(); i += AREA_UNIT) {
-      baseLayer.add(getVerticalLine(i, this.canvas));
+    for (let i = 0; i < this.stage.width(); i += AREA_UNIT) {
+      baseLayer.add(getVerticalLine(i, this.stage));
     }
-    for (let i = 0; i < this.canvas.height(); i += AREA_UNIT) {
-      baseLayer.add(getHorizontalLine(i, this.canvas));
+    for (let i = 0; i < this.stage.height(); i += AREA_UNIT) {
+      baseLayer.add(getHorizontalLine(i, this.stage));
     }
   }
 
   private width(): number {
-    return this.canvas.width();
+    return this.stage.width();
   }
 
   private heigth(): number {
-    return this.canvas.height();
+    return this.stage.height();
   }
 
   private canInsert(node: Konva.Node): any {

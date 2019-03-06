@@ -25,7 +25,7 @@ interface IState {
 export default class CircuitCanvas extends Component<IProps, IState> {
   private circuit: Circuit;
   private container: HTMLDivElement;
-  private canvas: Konva.Stage;
+  private stage: Konva.Stage;
   private nodeManager: NodeManager;
   private selectedPole: Konva.Circle;
 
@@ -79,13 +79,13 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   }
 
   componentDidMount() {
-    this.canvas = new Konva.Stage({
+    this.stage = new Konva.Stage({
       container: 'circuit-area',
       width: 1000,
       height: 1000,
     });
-    this.nodeManager = new NodeManager(this.canvas);
-    this.nodeManager.setupKonva().then(__ => this.canvas.on('click tap', ev => this.addSelectedElement(ev)));
+    this.nodeManager = new NodeManager(this.stage);
+    this.nodeManager.setupKonva().then(__ => this.stage.on('click tap', ev => this.addSelectedElement(ev)));
   }
 
   addEvents(node: Konva.Group): any {
@@ -109,9 +109,9 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   returnProperties = (properties: IPartProperties) => {
     this.setState({ propertiesEditorFields: {}, editingProperties: false });
     if (properties !== null) {
-      this.circuit.setPartProperties(this.nodeManager.editingPartId, properties);
-      const mainProperty = this.circuit.getPartMainProperty(this.nodeManager.editingPartId);
-      this.nodeManager.updatePartProperties(this.nodeManager.editingPartId, properties[mainProperty]);
+      this.circuit.setPartProperties(this.nodeManager.selectedPart, properties);
+      const mainProperty = this.circuit.getPartMainProperty(this.nodeManager.selectedPart);
+      this.nodeManager.updatePartProperties(this.nodeManager.selectedPart, properties[mainProperty]);
     }
   }
 
@@ -120,14 +120,14 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   }
 
   private openEditPart = () => {
-    const properties = this.circuit.getPartProperties(this.nodeManager.editingPartId);
+    const properties = this.circuit.getPartProperties(this.nodeManager.selectedPart);
     if (properties) {
       this.setState({ propertiesEditorFields: properties, editingProperties: true });
     }
   }
 
   private rotatePart = () => {
-    const poles = this.circuit.getPartPoleIds(this.nodeManager.editingPartId);
+    const poles = this.circuit.getPartPoleIds(this.nodeManager.selectedPart);
     this.nodeManager.rotatePart(poles);
   }
 
