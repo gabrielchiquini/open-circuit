@@ -8,6 +8,8 @@ import PropertiesEditor from './PropertiesEditor';
 import IPartProperties from './IPartProperties';
 import _ from 'lodash';
 
+import './CircuitCanvas.scss';
+
 interface IProps {
   circuit: Circuit;
   selectedElement: () => SomePart;
@@ -48,6 +50,14 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   render() {
     return (
       <div>
+        <div className="partOptionsContainer m-2">
+          <div>
+            <i className="fa fa-edit" onClick={this.openEditPart} />
+          </div>
+          <div>
+            <i className="fa fa-redo" onClick={this.rotatePart} />
+          </div>
+        </div>
         <div
           className="circuit-area"
           id="circuit-area"
@@ -80,7 +90,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
 
   addEvents(node: Konva.Group): any {
     node.getChildren().each(childNode => {
-      if (childNode.name() === PartName.PoleGroup) {
+      if (childNode.name() === PartName.Pole) {
         childNode.on('click touchend', ev => {
           this.handlePoleClick(ev);
         });
@@ -109,16 +119,20 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     this.nodeManager.selectPart(ev.target.getParent().id());
   }
 
-  private openEditPart() {
+  private openEditPart = () => {
     const properties = this.circuit.getPartProperties(this.nodeManager.editingPartId);
     if (properties) {
       this.setState({ propertiesEditorFields: properties, editingProperties: true });
     }
   }
 
+  private rotatePart = () => {
+    const poles = this.circuit.getPartPoleIds(this.nodeManager.editingPartId);
+    this.nodeManager.rotatePart(poles);
+  }
+
   private handlePoleClick(ev: Konva.KonvaEventObject<Event>) {
-    const targetGroup = ev.target.getParent();
-    const target = Array.from(targetGroup.getChildren()).find(shape => shape.name() === PartName.Pole) as Konva.Circle;
+    const target = ev.target as Konva.Circle;
     ev.cancelBubble = true;
     if (this.selectedPole) {
       this.circuit.addConnection(this.selectedPole.id(), target.id());

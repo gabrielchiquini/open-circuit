@@ -47,8 +47,11 @@ export default class Circuit {
     return this.findPart(id).mainProperty;
   }
 
+  getPartPoleIds(id: string): string[] {
+    return this.findPart(id).getPoleIds();
+  }
+
   private findPart(id: string) {
     return this.parts.find(part => part.id === id);
   }
-
 }

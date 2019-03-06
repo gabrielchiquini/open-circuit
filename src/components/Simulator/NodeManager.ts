@@ -1,4 +1,4 @@
-import Konva, { Line, Group } from 'konva';
+import Konva, { Line, Group, Circle } from 'konva';
 import {
   AREA_UNIT,
   getVerticalLine,
@@ -13,10 +13,13 @@ import {
 import IPartProperty from './IPartProperty';
 
 export default class NodeManager {
+  get editingPartId() {
+    return this._selectedPart;
+  }
   canvas: Konva.Stage;
   container: HTMLDivElement;
   circuitLayer: Konva.Layer<Konva.Node>;
-  private _editingPartId: string;
+  private _selectedPart: string;
   constructor(canvas: Konva.Stage) {
     this.canvas = canvas;
   }
@@ -28,10 +31,6 @@ export default class NodeManager {
 
     await this.setupBackground(baseLayer);
     this.canvas.draw();
-  }
-
-  get editingPartId() {
-    return this._editingPartId;
   }
 
   addNode(node: Konva.Node) {
@@ -62,6 +61,7 @@ export default class NodeManager {
       stroke: CIRCUIT_COLOR,
       strokeWidth: STROKE_WIDTH,
       tension: 1,
+      name: `pole-${target.id()} pole-${selectedPole.id()}`,
     });
     selectedPole.fill(CIRCUIT_COLOR);
     target.fill(CIRCUIT_COLOR);
@@ -81,17 +81,64 @@ export default class NodeManager {
 
   selectPart(partId: string): void {
     const part = this.canvas.find('#' + partId)[0] as Group;
-    const currentPart = this.canvas.find('#' + this._editingPartId)[0] as Group;
+    const currentPart = this.getSelectedPart();
     this.setImageStroke(currentPart, 'transparent');
-    if (this._editingPartId === partId) {
-      this._editingPartId = null;
+    if (this._selectedPart === partId) {
+      this._selectedPart = null;
     } else {
-      this._editingPartId = partId;
+      this._selectedPart = partId;
       this.setImageStroke(part, CIRCUIT_COLOR);
     }
     this.canvas.batchDraw();
   }
 
+  rotatePart(poles: string[]): void {
+    const selectedPart = this.getSelectedPart();
+    const lineMappings: Array<{ pole: Circle; relations: Circle[] }> = [];
+    poles.forEach(poleId => {
+      const nameForLine = 'pole-' + poleId;
+      const lines = this.canvas.find('.' + nameForLine);
+      const targets = lines.toArray().map(line => {
+        const targetPoleId = line
+          .removeName(nameForLine)
+          .name()
+          .replace('pole-', '');
+        return this.canvas.find('#' + targetPoleId)[0] as Circle;
+      });
+      lines.each(line => line.remove());
+      lineMappings.push({
+        pole: this.canvas.find('#' + poleId)[0] as Circle,
+        relations: targets,
+      });
+    });
+    const anchor = lineMappings
+      .map(mapping => mapping.pole)
+      .reduce((previous, current) => {
+        if (previous == null) {
+          return current;
+        }
+        if (previous.x() === current.x()) {
+          return previous.y() < current.y() ? previous : current;
+        }
+        return previous.x() < current.x() ? previous : current;
+      });
+    const oldAnchorPosition = anchor.getAbsolutePosition();
+    selectedPart.rotate(90);
+    const newAnchorPostion = anchor.getAbsolutePosition();
+    selectedPart.x(selectedPart.x() - (newAnchorPostion.x - oldAnchorPosition.x));
+    selectedPart.y(selectedPart.y() - (newAnchorPostion.y - oldAnchorPosition.y));
+    lineMappings.forEach(mapping => {
+      mapping.relations.forEach((target: Circle) => {
+        this.addConnection(mapping.pole, target);
+      });
+    });
+    selectedPart.offsetY(0);
+    this.canvas.batchDraw();
+  }
+
+  private getSelectedPart() {
+    return this.canvas.find('#' + this._selectedPart)[0] as Group;
+  }
   private setImageStroke(part: Konva.Group<Konva.Node>, color: string) {
     if (part && part.hasChildren()) {
       part.getChildren().each((child: Konva.Node) => {
@@ -123,11 +170,13 @@ export default class NodeManager {
   }
 
   private canInsert(node: Konva.Node): any {
-    const interceptor = Array.from(this.circuitLayer.getChildren())
-      .filter(existingPart => !(existingPart instanceof Line))
-      .find(existingPart => {
-        return hasIntersection(existingPart, node);
-      });
-    return typeof interceptor === 'undefined';
+    // TODO: correct insert
+    // const interceptor = Array.from(this.circuitLayer.getChildren())
+    //   .filter(existingPart => !(existingPart instanceof Line))
+    //   .find(existingPart => {
+    //     return hasIntersection(existingPart, node);
+    //   });
+    // return typeof interceptor === 'undefined';
+    return true;
   }
 }

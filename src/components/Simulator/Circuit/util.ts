@@ -17,11 +17,7 @@ interface IBounds {
   maxY: number;
 }
 
-export function correctPosition(
-  position: number,
-  dimension: number,
-  upperBound: number,
-): number {
+export function correctPosition(position: number, dimension: number, upperBound: number): number {
   const center = position - dimension / 2;
   position = Math.max(MARGIN, Math.min(center, upperBound - dimension));
   let gridDistance = position % AREA_UNIT;
@@ -110,9 +106,7 @@ function rectFromBounds(bounds: IBounds) {
 }
 
 function inside(bounds: IBounds, x: number, y: number) {
-  return (
-    between(x, bounds.minX, bounds.maxX) && between(y, bounds.minY, bounds.maxY)
-  );
+  return between(x, bounds.minX, bounds.maxX) && between(y, bounds.minY, bounds.maxY);
 }
 
 function between(target: number, lower: number, upper: number): boolean {

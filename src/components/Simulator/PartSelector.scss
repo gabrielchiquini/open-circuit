@@ -22,7 +22,7 @@ $part-size: 3.5rem;
 
 .selector-toggle {
   position: fixed;
-  top: $part-size / 2;
-  right: $part-size / 2;
+  right: 1rem;
   z-index: 1000;
+  font-size: 1.3rem;
 }

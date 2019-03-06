@@ -43,9 +43,9 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
               </div>
             );
           })}
-        </div>
-        <div className="selector-toggle" onClick={this.toggle}>
-          <i className={'fa fa-angle-' + ( this.state.visible ? 'up' : 'down' )} />
+          <div className="selector-toggle" onClick={this.toggle}>
+            <i className={'fa fa-angle-' + ( this.state.visible ? 'up' : 'down' )} />
+          </div>
         </div>
       </div>
     );
