@@ -42,13 +42,14 @@ export default class VoltageSource extends Part {
     };
   }
 
-  protected definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Group[]): void {
+  protected definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Circle[]): void {
     const leftPole = poleShapes[0];
     const rightPole = poleShapes[1];
-    const leftDimension = realDimension(leftPole);
-    const correction = leftDimension.width / 2;
-    leftPole.x(-correction);
-    rightPole.x(shape.width() - correction);
+    const groupDimension = realDimension(shape);
+    const y = groupDimension.height / 2;
+    rightPole.x(shape.width());
+    leftPole.y(y);
+    rightPole.y(y);
 
     group.add(leftPole, rightPole);
   }

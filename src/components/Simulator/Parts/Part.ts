@@ -41,7 +41,11 @@ export default abstract class Part {
     return this._node;
   }
 
-  protected abstract definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Group[]): void;
+  getPoleIds(): string[] {
+    return this.uids.filter(id => this._id !== id);
+  }
+
+  protected abstract definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Circle[]): void;
   protected abstract defineProperties(): IPartProperties;
 
   protected async getImage() {

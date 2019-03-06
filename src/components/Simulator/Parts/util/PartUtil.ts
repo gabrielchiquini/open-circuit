@@ -7,26 +7,27 @@ import { AREA_UNIT as UNIT } from '../../Circuit/util';
 export const AREA_UNIT = UNIT;
 const POLE_RADIUS = 5.7;
 
-export function getPoleShapes(ids: string[]): Konva.Group[] {
+export function getPoleShapes(ids: string[]): Konva.Circle[] {
   return ids.map(uid => {
-    const group = new Konva.Group({
-      name: PartName.PoleGroup,
-    });
-    const { width, height } = convertDimension({ width: 2, height: 2 });
-    const rect = new Konva.Rect({
-      width,
-      height,
-      stroke: 'transparent',
-    });
+    // const group = new Konva.Group({
+    //   name: PartName.PoleGroup,
+    // });
+    // const { width, height } = convertDimension({ width: 2, height: 2 });
+    // const rect = new Konva.Rect({
+    //   width,
+    //   height,
+    //   stroke: 'black',
+    // });
     const circle = new Circle({
       radius: POLE_RADIUS,
       fill: CIRCUIT_COLOR,
       name: PartName.Pole,
-      x: rect.width() / 2,
-      y: rect.height() / 2,
+      // x: rect.width() / 2,
+      // y: rect.height() / 2,
+      id: uid,
     });
-    group.add(rect, circle);
-    return group;
+    // group.add(rect, circle);
+    return circle;
   });
 }
 
