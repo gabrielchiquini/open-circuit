@@ -88,12 +88,6 @@ export function hasIntersection(p1: Node, p2: Node) {
   const rect1 = rectFromBounds(boundsP1);
   const rect2 = rectFromBounds(boundsP2);
   return (Util as any).haveIntersection(rect1, rect2);
-  // return (
-  //   inside(boundsP1, boundsP2.minX, boundsP2.minY) ||
-  //   inside(boundsP1, boundsP2.minX, boundsP2.maxY) ||
-  //   inside(boundsP1, boundsP2.maxX, boundsP2.minY) ||
-  //   inside(boundsP1, boundsP2.maxX, boundsP2.maxY)
-  // );
 }
 
 function rectFromBounds(bounds: IBounds) {
@@ -103,12 +97,4 @@ function rectFromBounds(bounds: IBounds) {
     width: bounds.maxX - bounds.minX,
     height: bounds.maxY - bounds.minY,
   };
-}
-
-function inside(bounds: IBounds, x: number, y: number) {
-  return between(x, bounds.minX, bounds.maxX) && between(y, bounds.minY, bounds.maxY);
-}
-
-function between(target: number, lower: number, upper: number): boolean {
-  return target >= lower && target <= upper;
 }
