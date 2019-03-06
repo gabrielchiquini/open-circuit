@@ -20,6 +20,7 @@ interface IState {
   editingProperties: boolean;
   width: number;
   height: number;
+  isPartSelected: boolean;
 }
 
 export default class CircuitCanvas extends Component<IProps, IState> {
@@ -37,6 +38,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
       editingProperties: false,
       width: window.innerWidth,
       height: window.innerHeight,
+      isPartSelected: false,
     };
 
     window.addEventListener('resize', () => {
@@ -50,7 +52,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   render() {
     return (
       <div>
-        <div className="partOptionsContainer m-2">
+        <div className="partOptionsContainer m-2" hidden={!this.state.isPartSelected}>
           <div>
             <i className="fa fa-edit" onClick={this.openEditPart} />
           </div>
@@ -118,7 +120,8 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   private handlePartClick(ev: Konva.KonvaEventObject<Event>): any {
     const { posX, posY } = this.guessClickPosition(ev);
     if (this.nodeManager.checkNoPoleNear(posX, posY)) {
-      this.nodeManager.selectPart(ev.target.getParent().id());
+      const isPartSelected = this.nodeManager.selectPart(ev.target.getParent().id());
+      this.setState({ isPartSelected });
     }
   }
 

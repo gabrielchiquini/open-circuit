@@ -100,7 +100,7 @@ export default class NodeManager {
     this.stage.draw();
   }
 
-  selectPart(partId: string): void {
+  selectPart(partId: string): boolean {
     const part = this.stage.find('#' + partId)[0] as Group;
     const currentPart = this.getSelectedPart();
     this.setImageStroke(currentPart, 'transparent');
@@ -111,6 +111,7 @@ export default class NodeManager {
       this.setImageStroke(part, CIRCUIT_COLOR);
     }
     this.stage.batchDraw();
+    return this._selectedPart != null;
   }
 
   rotatePart(poles: string[]): void {
