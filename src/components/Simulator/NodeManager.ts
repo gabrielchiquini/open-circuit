@@ -1,4 +1,4 @@
-import Konva, { Line, Group, Circle } from 'konva';
+import Konva, { Line, Group, Circle, Util } from 'konva';
 import {
   AREA_UNIT,
   getVerticalLine,
@@ -11,6 +11,8 @@ import {
   STROKE_WIDTH,
 } from './Circuit/util';
 import IPartProperty from './IPartProperty';
+import PartName from './Parts/util/PartName';
+const CLICK_RECT_SIZE = 40;
 
 export default class NodeManager {
   get selectedPart() {
@@ -22,6 +24,25 @@ export default class NodeManager {
   private _selectedPart: string;
   constructor(stage: Konva.Stage) {
     this.stage = stage;
+  }
+
+  checkNoPoleNear(posX: number, posY: number): boolean {
+    const clickRect = {
+      x: posX - CLICK_RECT_SIZE / 2,
+      y: posY - CLICK_RECT_SIZE / 2,
+      width: CLICK_RECT_SIZE,
+      height: CLICK_RECT_SIZE,
+    };
+    const poleFound = this.circuitLayer
+      .find(`.${PartName.Pole}`)
+      .toArray()
+      .find(pole => {
+        return (Util as any).haveIntersection(clickRect, pole.getClientRect());
+      });
+    if (poleFound) {
+      poleFound.fire('click');
+    }
+    return poleFound === undefined;
   }
 
   async setupKonva(): Promise<void> {

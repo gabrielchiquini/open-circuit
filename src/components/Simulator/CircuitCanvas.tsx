@@ -85,7 +85,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
       height: 1000,
     });
     this.nodeManager = new NodeManager(this.stage);
-    this.nodeManager.setupKonva().then(__ => this.stage.on('click tap', ev => this.addSelectedElement(ev)));
+    this.nodeManager.setupKonva().then(__ => this.stage.on('click tap', ev => this.stageClicked(ev)));
   }
 
   addEvents(node: Konva.Group): any {
@@ -116,7 +116,10 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   }
 
   private handlePartClick(ev: Konva.KonvaEventObject<Event>): any {
-    this.nodeManager.selectPart(ev.target.getParent().id());
+    const { posX, posY } = this.guessClickPosition(ev);
+    if (this.nodeManager.checkNoPoleNear(posX, posY)) {
+      this.nodeManager.selectPart(ev.target.getParent().id());
+    }
   }
 
   private openEditPart = () => {
@@ -165,11 +168,16 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     return typeof anyEvent.layerX === 'number' && typeof anyEvent.layerY === 'number';
   }
 
-  private async addSelectedElement(ev: KonvaEventObject<Event>): Promise<void> {
+  private stageClicked(ev: KonvaEventObject<Event>): void {
     if (ev.target !== ev.currentTarget) {
       return;
     }
     const { posX, posY } = this.guessClickPosition(ev);
+    if (this.nodeManager.checkNoPoleNear(posX, posY)) {
+      this.addSelectedElement(posX, posY);
+    }
+  }
+  private async addSelectedElement(posX: number, posY: number) {
     const selectedConstructor = this.props.selectedElement();
     const part = new selectedConstructor();
     const node = await part.getNode();
