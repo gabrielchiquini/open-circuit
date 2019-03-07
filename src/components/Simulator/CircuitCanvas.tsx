@@ -54,10 +54,10 @@ export default class CircuitCanvas extends Component<IProps, IState> {
       <div>
         <div className="partOptionsContainer m-2" hidden={!this.state.isPartSelected}>
           <div>
-            <i className="fa fa-edit" onClick={this.openEditPart} />
+            <i className="fa fa-fw fa-edit" onClick={this.openEditPart} />
           </div>
           <div>
-            <i className="fa fa-redo" onClick={this.rotatePart} />
+            <i className="fa fa-fw fa-redo" onClick={this.rotatePart} />
           </div>
         </div>
         <div

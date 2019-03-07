@@ -24,6 +24,9 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
     const selectedPart = this.props.selectedElement() || PARTS[0];
     return (
       <div>
+        <div className="selector-toggle" onClick={this.toggle}>
+          <i className={'fa fa-fw fa-angle-' + (this.state.visible ? 'up' : 'down')} />
+        </div>
         <div className="circuit-parts m-2" hidden={!this.state.visible}>
           {PARTS.map(part => {
             const clazz = ['part-card', 'mr-3'];
@@ -31,21 +34,11 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
               clazz.push('selected');
             }
             return (
-              <div
-                className={clazz.join(' ')}
-                key={part.name}
-                onClick={_ => this.props.changeSelectedPart(part)}
-              >
-                <img
-                  src={part.imageSrc}
-                  className="part-image"
-                />
+              <div className={clazz.join(' ')} key={part.name} onClick={_ => this.props.changeSelectedPart(part)}>
+                <img src={part.imageSrc} className="part-image" />
               </div>
             );
           })}
-          <div className="selector-toggle" onClick={this.toggle}>
-            <i className={'fa fa-angle-' + ( this.state.visible ? 'up' : 'down' )} />
-          </div>
         </div>
       </div>
     );
