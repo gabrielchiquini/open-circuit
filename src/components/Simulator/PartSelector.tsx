@@ -1,10 +1,12 @@
-import React, {Component} from 'react';
-import {PARTS, SomePart} from './Parts';
+import React, { Component } from 'react';
+import { SomePart } from './Parts';
+import { PARTS } from './Parts';
 import './PartSelector.scss';
 
 interface IPropsType {
   changeSelectedPart: (part: SomePart) => void;
   selectedElement: () => SomePart;
+  simulate: () => any;
 }
 
 interface IStateType {
@@ -22,8 +24,9 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
     const selectedPart = this.props.selectedElement() || PARTS[0];
     return (
       <div>
-        <div className="selector-toggle" onClick={this.toggle}>
-          <i className={'fa fa-fw fa-angle-' + (this.state.visible ? 'up' : 'down')}/>
+        <div className="selector-toggle">
+          <i className="far fa-play-circle" onClick={this.props.simulate}></i>
+          <i className={'fa fa-fw fa-angle-' + (this.state.visible ? 'up' : 'down')} onClick={this.toggle} />
         </div>
         <div className="circuit-parts m-2" hidden={!this.state.visible}>
           {PARTS.map(part => {

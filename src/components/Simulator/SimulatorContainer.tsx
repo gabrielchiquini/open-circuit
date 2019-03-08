@@ -1,8 +1,8 @@
-import React, {Component} from "react";
-import CircuitCanvas from "./CircuitCanvas";
-import PartSelector from "./PartSelector";
-import Circuit from "./Circuit/Circuit";
-import {SomePart} from "./Parts";
+import React, { Component } from 'react';
+import CircuitCanvas from './CircuitCanvas';
+import PartSelector from './PartSelector';
+import Circuit from './Circuit/Circuit';
+import { SomePart } from './Parts';
 
 export default class SimulatorContainer extends Component<{}, { selectedPart: SomePart }> {
   circuit: Circuit;
@@ -16,16 +16,24 @@ export default class SimulatorContainer extends Component<{}, { selectedPart: So
   render() {
     return (
       <div>
-        <PartSelector changeSelectedPart={this.changedSelectedElement} selectedElement={this.getSelectedPart}/>
-        <CircuitCanvas circuit={this.circuit} selectedElement={this.getSelectedPart}/>
+        <PartSelector
+          changeSelectedPart={this.changedSelectedElement}
+          selectedElement={this.getSelectedPart}
+          simulate={this.simulate}
+        />
+        <CircuitCanvas circuit={this.circuit} selectedElement={this.getSelectedPart} />
       </div>
-
     );
   }
 
   getSelectedPart = () => {
     return this.state.selectedPart;
   };
+
+  simulate = () => {
+    this.circuit.getRepresentation();
+    // TODO: CALL SIMULATOR
+  }
 
   private changedSelectedElement = (selectedPart: SomePart) => {
     this.setState({selectedPart});

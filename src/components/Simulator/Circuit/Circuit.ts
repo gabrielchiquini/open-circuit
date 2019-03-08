@@ -1,9 +1,9 @@
 import Part from '../Parts/Part';
 import IPartProperties from '../IPartProperties';
 import _ from 'lodash';
+import { ICircuitRepresentation, IPartRepresentation } from './ICircuitRepresentation';
 
 export default class Circuit {
-
   private parts: Part[];
   private nodes: Array<Set<string>>;
 
@@ -49,6 +49,24 @@ export default class Circuit {
 
   getPartPoleIds(id: string): string[] {
     return this.findPart(id).getPoleIds();
+  }
+
+  getRepresentation(): ICircuitRepresentation {
+    return {
+      nodes: this.nodes.map(item => Array.from(item)),
+      parts: this.parts.map(item => this.getPartRepresentation(item)),
+    };
+  }
+  private getPartRepresentation(item: Part): IPartRepresentation {
+    const properties: any = {};
+    Object.keys(item.properties).forEach(key => {
+      properties[key] = item.properties[key].value;
+    });
+    return {
+      poles: item.uids,
+      properties,
+      type: item.type,
+    };
   }
 
   private findPart(id: string) {

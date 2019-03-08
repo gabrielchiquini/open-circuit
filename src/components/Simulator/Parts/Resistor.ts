@@ -8,13 +8,6 @@ import IPartProperties from '../IPartProperties';
 const defaultResistance = 1e3;
 
 export default class Resistor extends Part {
-  readonly mainProperty = 'resistance';
-  resistance: number;
-
-  constructor() {
-    super(2);
-    this.resistance = defaultResistance;
-  }
 
   static get imageSrc() {
     return _image;
@@ -33,6 +26,14 @@ export default class Resistor extends Part {
 
   protected get image() {
     return _image;
+  }
+  readonly mainProperty = 'resistance';
+  resistance: number;
+  readonly type = 'Resistor';
+
+  constructor() {
+    super(2);
+    this.resistance = defaultResistance;
   }
 
   protected defineProperties(): IPartProperties {

@@ -7,10 +7,10 @@ import IPartProperties from '../IPartProperties';
 import PartName from './util/PartName';
 
 export default abstract class Part {
+  abstract get type(): string;
   properties: IPartProperties;
   _node: Promise<Konva.Group>;
-  protected uids: string[];
-
+  uids: string[];
   private _id: string;
 
   protected constructor(public poles: number) {
