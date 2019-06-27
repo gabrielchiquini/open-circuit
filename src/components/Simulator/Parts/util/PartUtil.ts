@@ -1,27 +1,25 @@
-import Konva, { Circle, Group, Rect } from 'konva';
+import Konva, {Circle, Group, Rect} from 'konva';
 import PartName from './PartName';
-import { CIRCUIT_COLOR, realDimension } from '../../Circuit/util';
+import {AREA_UNIT as UNIT, CIRCUIT_COLOR, realDimension} from '../../Circuit/util';
 import IDimension from '../../../../util/IDimension';
-import { AREA_UNIT as UNIT } from '../../Circuit/util';
 
 export const AREA_UNIT = UNIT;
 const POLE_RADIUS = 5.7;
 
 export function getPoleShapes(ids: string[]): Konva.Circle[] {
   return ids.map(uid => {
-    const circle = new Circle({
+    return new Circle({
       radius: POLE_RADIUS,
       fill: CIRCUIT_COLOR,
       name: PartName.Pole,
       id: uid,
     });
-    return circle;
   });
 }
 
 export function partRect(dimension: IDimension, group: Group) {
   const absoluteDimension = convertDimension(dimension);
-  const shape = new Rect({
+  return new Rect({
     width: absoluteDimension.width,
     height: absoluteDimension.height,
     name: PartName.Part,
@@ -29,7 +27,6 @@ export function partRect(dimension: IDimension, group: Group) {
     y: group.y(),
     stroke: 'transparent',
   });
-  return shape;
 }
 
 export function getNodeCenterX(node: Konva.Node): number {

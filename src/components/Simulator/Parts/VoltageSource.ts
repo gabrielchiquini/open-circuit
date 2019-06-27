@@ -3,12 +3,18 @@ import IDimension from '../../../util/IDimension';
 import Konva from 'konva';
 import _image from '../../../assets/images/VoltageSource.svg';
 import IPartProperties from '../IPartProperties';
-import { realDimension } from '../Circuit/util';
+import {realDimension} from '../Circuit/util';
 
 const DEFAULT_VOLTAGE = 5;
 
 export default class VoltageSource extends Part {
   readonly mainProperty = 'voltage';
+  voltage = DEFAULT_VOLTAGE;
+
+  constructor() {
+    super(2);
+  }
+
   static get imageSrc() {
     return _image;
   }
@@ -28,10 +34,6 @@ export default class VoltageSource extends Part {
     return VoltageSource.imageSrc;
   }
 
-  voltage = DEFAULT_VOLTAGE;
-  constructor() {
-    super(2);
-  }
   protected defineProperties(): IPartProperties {
     return {
       voltage: {

@@ -1,29 +1,32 @@
-import Konva, { Line, Group, Circle, Util } from 'konva';
+import Konva, {Circle, Group, Util} from 'konva';
 import {
   AREA_UNIT,
-  getVerticalLine,
-  getHorizontalLine,
-  correctPosition,
   CIRCUIT_COLOR,
-  hasIntersection,
+  correctPosition,
+  getHorizontalLine,
+  getVerticalLine,
   realDimension,
   SELECTION_COLOR,
   STROKE_WIDTH,
 } from './Circuit/util';
 import IPartProperty from './IPartProperty';
 import PartName from './Parts/util/PartName';
+
 const CLICK_RECT_SIZE = 40;
 
 export default class NodeManager {
-  get selectedPart() {
-    return this._selectedPart;
-  }
   stage: Konva.Stage;
   container: HTMLDivElement;
   circuitLayer: Konva.Layer<Konva.Node>;
+
   private _selectedPart: string;
+
   constructor(stage: Konva.Stage) {
     this.stage = stage;
+  }
+
+  get selectedPart() {
+    return this._selectedPart;
   }
 
   checkNoPoleNear(posX: number, posY: number): boolean {
@@ -161,6 +164,7 @@ export default class NodeManager {
   private getSelectedPart() {
     return this.stage.find('#' + this._selectedPart)[0] as Group;
   }
+
   private setImageStroke(part: Konva.Group<Konva.Node>, color: string) {
     if (part && part.hasChildren()) {
       part.getChildren().each((child: Konva.Node) => {
@@ -174,6 +178,7 @@ export default class NodeManager {
   private setupCircuitLayer(): void {
     this.circuitLayer = new Konva.Layer();
   }
+
   private setupBackground(baseLayer: Konva.Layer) {
     for (let i = 0; i < this.stage.width(); i += AREA_UNIT) {
       baseLayer.add(getVerticalLine(i, this.stage));

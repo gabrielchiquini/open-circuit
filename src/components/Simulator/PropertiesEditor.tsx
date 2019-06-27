@@ -1,7 +1,7 @@
-import React, { Component, ChangeEvent, FormEvent } from 'react';
+import React, {ChangeEvent, Component, FormEvent} from 'react';
 import './PartSelector.scss';
 import IPartProperties from './IPartProperties';
-import { Modal, Button } from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 
 interface IPropsType {
   visible: boolean;
@@ -20,11 +20,11 @@ export default class PropertiesEditor extends Component<IPropsType, IStateType> 
 
   constructor(props: IPropsType) {
     super(props);
-    this.state = { fields: {} };
+    this.state = {fields: {}};
   }
 
   componentWillReceiveProps(nextProps: IPropsType) {
-    this.setState({ fields: nextProps.fields });
+    this.setState({fields: nextProps.fields});
   }
 
   componentDidUpdate() {
@@ -76,22 +76,22 @@ export default class PropertiesEditor extends Component<IPropsType, IStateType> 
   handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const fields = this.state.fields;
     fields[e.target.name].value = parseFloat(e.target.value);
-  }
+  };
 
   submitForm = (e: FormEvent) => {
     e.preventDefault();
     if (this.formRef.current.checkValidity()) {
       this.props.returnProperties(this.state.fields);
     }
-  }
+  };
 
   cancel = () => {
     this.props.returnProperties(null);
-  }
+  };
   private opened = () => {
     const input = Array.from(this.formRef.current.elements).find(el => el.tagName === 'INPUT') as HTMLInputElement;
     if (input) {
       input.focus();
     }
-  }
+  };
 }

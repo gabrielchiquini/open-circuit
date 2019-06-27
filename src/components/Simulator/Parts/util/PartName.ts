@@ -3,4 +3,5 @@ enum PartName {
   PoleGroup = 'POLE_GROUP',
   Pole = 'POLE',
 }
+
 export default PartName;

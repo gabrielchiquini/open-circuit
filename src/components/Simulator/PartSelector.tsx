@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import { SomePart } from './Parts';
-import { PARTS } from './Parts';
-import { ASSET_DIR } from './Circuit/util';
+import React, {Component} from 'react';
+import {PARTS, SomePart} from './Parts';
 import './PartSelector.scss';
 
 interface IPropsType {
@@ -17,7 +15,7 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
   constructor(props: IPropsType) {
     super(props);
     props.changeSelectedPart(PARTS[0]);
-    this.state = { visible: true };
+    this.state = {visible: true};
   }
 
   render() {
@@ -25,7 +23,7 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
     return (
       <div>
         <div className="selector-toggle" onClick={this.toggle}>
-          <i className={'fa fa-fw fa-angle-' + (this.state.visible ? 'up' : 'down')} />
+          <i className={'fa fa-fw fa-angle-' + (this.state.visible ? 'up' : 'down')}/>
         </div>
         <div className="circuit-parts m-2" hidden={!this.state.visible}>
           {PARTS.map(part => {
@@ -34,8 +32,8 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
               clazz.push('selected');
             }
             return (
-              <div className={clazz.join(' ')} key={part.name} onClick={_ => this.props.changeSelectedPart(part)}>
-                <img src={part.imageSrc} className="part-image" />
+              <div className={clazz.join(' ')} key={part.name} onClick={() => this.props.changeSelectedPart(part)}>
+                <img src={part.imageSrc} className="part-image"/>
               </div>
             );
           })}
@@ -45,6 +43,6 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
   }
 
   toggle = () => {
-    this.setState({ visible: !this.state.visible });
-  }
+    this.setState({visible: !this.state.visible});
+  };
 }

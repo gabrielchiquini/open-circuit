@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import Konva, { KonvaEventObject } from 'konva';
-import { SomePart } from './Parts';
+import React, {Component} from 'react';
+import Konva, {KonvaEventObject} from 'konva';
+import {SomePart} from './Parts';
 import Circuit from './Circuit/Circuit';
 import PartName from './Parts/util/PartName';
 import NodeManager from './NodeManager';
 import PropertiesEditor from './PropertiesEditor';
 import IPartProperties from './IPartProperties';
-import _ from 'lodash';
 
 import './CircuitCanvas.scss';
 
@@ -54,10 +53,10 @@ export default class CircuitCanvas extends Component<IProps, IState> {
       <div>
         <div className="partOptionsContainer m-2" hidden={!this.state.isPartSelected}>
           <div>
-            <i className="fa fa-fw fa-edit" onClick={this.openEditPart} />
+            <i className="fa fa-fw fa-edit" onClick={this.openEditPart}/>
           </div>
           <div>
-            <i className="fa fa-fw fa-redo" onClick={this.rotatePart} />
+            <i className="fa fa-fw fa-redo" onClick={this.rotatePart}/>
           </div>
         </div>
         <div
@@ -105,37 +104,37 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   }
 
   editingHide = () => {
-    this.setState({ propertiesEditorFields: {}, editingProperties: false });
-  }
+    this.setState({propertiesEditorFields: {}, editingProperties: false});
+  };
 
   returnProperties = (properties: IPartProperties) => {
-    this.setState({ propertiesEditorFields: {}, editingProperties: false });
+    this.setState({propertiesEditorFields: {}, editingProperties: false});
     if (properties !== null) {
       this.circuit.setPartProperties(this.nodeManager.selectedPart, properties);
       const mainProperty = this.circuit.getPartMainProperty(this.nodeManager.selectedPart);
       this.nodeManager.updatePartProperties(this.nodeManager.selectedPart, properties[mainProperty]);
     }
-  }
+  };
 
   private handlePartClick(ev: Konva.KonvaEventObject<Event>): any {
-    const { posX, posY } = this.guessClickPosition(ev);
+    const {posX, posY} = this.guessClickPosition(ev);
     if (this.nodeManager.checkNoPoleNear(posX, posY)) {
       const isPartSelected = this.nodeManager.selectPart(ev.target.getParent().id());
-      this.setState({ isPartSelected });
+      this.setState({isPartSelected});
     }
   }
 
   private openEditPart = () => {
     const properties = this.circuit.getPartProperties(this.nodeManager.selectedPart);
     if (properties) {
-      this.setState({ propertiesEditorFields: properties, editingProperties: true });
+      this.setState({propertiesEditorFields: properties, editingProperties: true});
     }
-  }
+  };
 
   private rotatePart = () => {
     const poles = this.circuit.getPartPoleIds(this.nodeManager.selectedPart);
     this.nodeManager.rotatePart(poles);
-  }
+  };
 
   private handlePoleClick(ev: Konva.KonvaEventObject<Event>) {
     const target = ev.target as Konva.Circle;
@@ -163,7 +162,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     }
     posY += this.container.scrollTop - this.container.offsetTop;
     posX += this.container.scrollLeft - this.container.offsetLeft;
-    return { posX, posY };
+    return {posX, posY};
   }
 
   private isMouseEvent(event: Event): event is MouseEvent {
@@ -175,11 +174,12 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     if (ev.target !== ev.currentTarget) {
       return;
     }
-    const { posX, posY } = this.guessClickPosition(ev);
+    const {posX, posY} = this.guessClickPosition(ev);
     if (this.nodeManager.checkNoPoleNear(posX, posY)) {
       this.addSelectedElement(posX, posY);
     }
   }
+
   private async addSelectedElement(posX: number, posY: number) {
     const selectedConstructor = this.props.selectedElement();
     const part = new selectedConstructor();

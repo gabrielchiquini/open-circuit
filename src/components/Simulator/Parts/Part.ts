@@ -1,12 +1,27 @@
 import uuid from 'uuid/v4';
 import Konva from 'konva';
-import { partRect, centerPositionY, convertDimension, getPoleShapes, centerPositionX } from './util/PartUtil';
+import {centerPositionX, centerPositionY, convertDimension, getPoleShapes, partRect} from './util/PartUtil';
 import IDimension from '../../../util/IDimension';
-import { scaleHigherDimension, getImage } from '../../../util/imageUtil';
+import {getImage, scaleHigherDimension} from '../../../util/imageUtil';
 import IPartProperties from '../IPartProperties';
 import PartName from './util/PartName';
 
 export default abstract class Part {
+  properties: IPartProperties;
+  _node: Promise<Konva.Group>;
+  protected uids: string[];
+
+  private _id: string;
+
+  protected constructor(public poles: number) {
+    if (poles < 1) {
+      throw new RangeError('All parts must have at least one pole');
+    }
+    this.setUids(poles);
+    this.properties = this.defineProperties();
+    this._node = this.createNode();
+  }
+
   static get imageSrc(): string {
     throw new Error('Method not implemented');
   }
@@ -15,23 +30,11 @@ export default abstract class Part {
     return this._id;
   }
 
-  protected abstract get imageSrc(): string;
-  protected abstract get dimension(): IDimension;
   abstract get mainProperty(): string;
-  properties: IPartProperties;
 
-  _node: Promise<Konva.Group>;
-  protected uids: string[];
-  private _id: string;
+  protected abstract get imageSrc(): string;
 
-  constructor(public poles: number) {
-    if (poles < 1) {
-      throw new RangeError('All parts must have at least one pole');
-    }
-    this.setUids(poles);
-    this.properties = this.defineProperties();
-    this._node = this.createNode();
-  }
+  protected abstract get dimension(): IDimension;
 
   hasPole(pole: string) {
     return this.uids.includes(pole);
@@ -46,6 +49,7 @@ export default abstract class Part {
   }
 
   protected abstract definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Circle[]): void;
+
   protected abstract defineProperties(): IPartProperties;
 
   protected async getImage() {

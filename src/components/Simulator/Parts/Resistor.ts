@@ -2,13 +2,20 @@ import Konva from 'konva';
 import Part from './Part';
 import IDimension from '../../../util/IDimension';
 import _image from '../../../assets/images/Resistor.svg';
-import { realDimension } from '../Circuit/util';
+import {realDimension} from '../Circuit/util';
 import IPartProperties from '../IPartProperties';
 
 const defaultResistance = 1e3;
 
 export default class Resistor extends Part {
   readonly mainProperty = 'resistance';
+  resistance: number;
+
+  constructor() {
+    super(2);
+    this.resistance = defaultResistance;
+  }
+
   static get imageSrc() {
     return _image;
   }
@@ -27,12 +34,7 @@ export default class Resistor extends Part {
   protected get image() {
     return _image;
   }
-  resistance: number;
 
-  constructor() {
-    super(2);
-    this.resistance = defaultResistance;
-  }
   protected defineProperties(): IPartProperties {
     return {
       resistance: {

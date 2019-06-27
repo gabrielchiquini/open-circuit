@@ -1,4 +1,4 @@
-import { Group, Line, Stage, Node, Vector2d, Util } from 'konva';
+import {Group, Line, Node, Stage, Util} from 'konva';
 import IDimension from '../../../util/IDimension';
 
 export const ASSET_DIR = 'assets/circuit/';
