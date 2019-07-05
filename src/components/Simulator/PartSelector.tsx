@@ -7,6 +7,7 @@ interface IPropsType {
   changeSelectedPart: (part: SomePart) => void;
   selectedElement: () => SomePart;
   simulate: () => any;
+  response: number[];
 }
 
 interface IStateType {
@@ -40,6 +41,7 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
               </div>
             );
           })}
+          {this.props.response ? `[${this.props.response.join(' | ')}]` : ''}
         </div>
       </div>
     );

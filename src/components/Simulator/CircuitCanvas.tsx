@@ -58,6 +58,9 @@ export default class CircuitCanvas extends Component<IProps, IState> {
           <div>
             <i className="fa fa-fw fa-redo" onClick={this.rotatePart}/>
           </div>
+          {/* <div>
+            <i className="fa fa-fw fa-trash-alt" onClick={this.deletePart}/>
+          </div> */}
         </div>
         <div
           className="circuit-area"
@@ -187,5 +190,12 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     this.addEvents(node);
     this.circuit.addPart(part);
     this.nodeManager.addPart(node, posX, posY);
+  }
+
+  private deletePart = () => {
+    const poles = this.circuit.getPartPoleIds(this.nodeManager.selectedPart);
+    this.nodeManager.deletePart(poles);
+    this.circuit.deletePart(this.nodeManager.selectedPart);
+    this.setState({isPartSelected: false});
   }
 }

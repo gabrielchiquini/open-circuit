@@ -1,4 +1,4 @@
-import Konva, {Circle, Group, Util} from 'konva';
+import Konva, {Circle, Group, Line, Util} from 'konva';
 import {
   AREA_UNIT,
   CIRCUIT_COLOR,
@@ -15,6 +15,10 @@ import PartName from './Parts/util/PartName';
 const CLICK_RECT_SIZE = 40;
 
 export default class NodeManager {
+
+  get selectedPart() {
+    return this._selectedPart;
+  }
   stage: Konva.Stage;
   container: HTMLDivElement;
   circuitLayer: Konva.Layer<Konva.Node>;
@@ -23,10 +27,6 @@ export default class NodeManager {
 
   constructor(stage: Konva.Stage) {
     this.stage = stage;
-  }
-
-  get selectedPart() {
-    return this._selectedPart;
   }
 
   checkNoPoleNear(posX: number, posY: number): boolean {
@@ -159,6 +159,16 @@ export default class NodeManager {
     });
     selectedPart.offsetY(0);
     this.stage.batchDraw();
+  }
+
+  deletePart(poles: string[]) {
+    this.getSelectedPart().destroy();
+    const linesMatching = this.circuitLayer.find(node => {
+      const name = node.name();
+      return node instanceof Line && poles.findIndex(pole => name.includes(pole)) > -1;
+    }).toArray();
+    linesMatching.forEach(node => node.destroy());
+    this.stage.draw();
   }
 
   private getSelectedPart() {

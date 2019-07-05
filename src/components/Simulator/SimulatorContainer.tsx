@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import CircuitCanvas from './CircuitCanvas';
+import calculate from 'open-circuit-calculator';
 import PartSelector from './PartSelector';
 import Circuit from './Circuit/Circuit';
 import { SomePart } from './Parts';
 
-export default class SimulatorContainer extends Component<{}, { selectedPart: SomePart }> {
+export default class SimulatorContainer extends Component<{}, { selectedPart: SomePart, response: number[] }> {
   circuit: Circuit;
 
   constructor(props: {}) {
     super(props);
     this.circuit = new Circuit();
-    this.state = {selectedPart: null};
+    this.state = { selectedPart: null, response: null };
   }
 
   render() {
@@ -20,6 +21,7 @@ export default class SimulatorContainer extends Component<{}, { selectedPart: So
           changeSelectedPart={this.changedSelectedElement}
           selectedElement={this.getSelectedPart}
           simulate={this.simulate}
+          response={this.state.response}
         />
         <CircuitCanvas circuit={this.circuit} selectedElement={this.getSelectedPart} />
       </div>
@@ -31,8 +33,8 @@ export default class SimulatorContainer extends Component<{}, { selectedPart: So
   };
 
   simulate = () => {
-    this.circuit.getRepresentation();
-    // TODO: CALL SIMULATOR
+    const response = calculate(this.circuit.getRepresentation())
+    this.setState({ response });
   }
 
   private changedSelectedElement = (selectedPart: SomePart) => {

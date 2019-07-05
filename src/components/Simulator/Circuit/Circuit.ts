@@ -72,4 +72,14 @@ export default class Circuit {
   private findPart(id: string) {
     return this.parts.find(part => part.id === id);
   }
+
+  deletePart(selectedPartId: string) {
+    const partIndex = this.parts.findIndex(part => part.id === selectedPartId);
+    this.parts.splice(partIndex, 1);
+    const ids = this.getPartPoleIds(selectedPartId);
+    ids.forEach(poleId => {
+      this.nodes.forEach(node => node.delete(poleId));
+    });
+    this.nodes = this.nodes.filter(node => node.size > 1);
+  }
 }
