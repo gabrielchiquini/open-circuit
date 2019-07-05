@@ -7,7 +7,7 @@ interface IPropsType {
   changeSelectedPart: (part: SomePart) => void;
   selectedElement: () => SomePart;
   simulate: () => any;
-  response: number[];
+  response: string[];
 }
 
 interface IStateType {

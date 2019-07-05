@@ -5,7 +5,7 @@ import PartSelector from './PartSelector';
 import Circuit from './Circuit/Circuit';
 import { SomePart } from './Parts';
 
-export default class SimulatorContainer extends Component<{}, { selectedPart: SomePart, response: number[] }> {
+export default class SimulatorContainer extends Component<{}, { selectedPart: SomePart, response: string[] }> {
   circuit: Circuit;
 
   constructor(props: {}) {
@@ -33,7 +33,7 @@ export default class SimulatorContainer extends Component<{}, { selectedPart: So
   };
 
   simulate = () => {
-    const response = calculate(this.circuit.getRepresentation())
+    const response = calculate(this.circuit.getRepresentation()).map(value => value.toFixed(2));
     this.setState({ response });
   }
 
