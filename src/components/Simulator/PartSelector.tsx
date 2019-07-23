@@ -26,7 +26,7 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
     return (
       <div>
         <div className="selector-toggle">
-          <i className="far fa-play-circle" onClick={this.props.simulate}></i>
+          <i className="far fa-play-circle" onClick={this.props.simulate}/>
           <i className={'fa fa-fw fa-angle-' + (this.state.visible ? 'up' : 'down')} onClick={this.toggle} />
         </div>
         <div className="circuit-parts m-2" hidden={!this.state.visible}>

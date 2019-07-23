@@ -1,7 +1,7 @@
 import Part from '../Parts/Part';
 import IPartProperties from '../IPartProperties';
-import _ from 'lodash';
-import { ICircuitRepresentation, IPartRepresentation } from './ICircuitRepresentation';
+import {cloneDeep} from 'lodash';
+import {ICircuitRepresentation, IPartRepresentation} from './ICircuitRepresentation';
 
 export default class Circuit {
   private parts: Part[];
@@ -25,18 +25,9 @@ export default class Circuit {
     node.add(pole1).add(pole2);
   }
 
-  removePart(pole: string) {
-    const index = this.parts.findIndex(part => part.hasPole(pole));
-    this.parts.splice(index, 1);
-    this.nodes = this.nodes.filter(node => {
-      node.delete(pole);
-      return pole.length > 1;
-    });
-  }
-
   getPartProperties(id: string): IPartProperties {
     const properties = this.findPart(id).properties;
-    return _.cloneDeep(properties);
+    return cloneDeep(properties);
   }
 
   setPartProperties(id: string, properties: IPartProperties): void {
@@ -57,6 +48,18 @@ export default class Circuit {
       parts: this.parts.map(item => this.getPartRepresentation(item)),
     };
   }
+
+  deletePart(selectedPartId: string) {
+    const partIndex = this.findPartIndex(selectedPartId);
+    const part = this.parts[partIndex];
+    const ids = part.getPoleIds();
+    this.parts.splice(partIndex, 1);
+    this.nodes.forEach(node => {
+      ids.forEach(id => node.delete(id));
+    });
+    this.nodes = this.nodes.filter(node => node.size > 1);
+  }
+
   private getPartRepresentation(item: Part): IPartRepresentation {
     const properties: any = {};
     Object.keys(item.properties).forEach(key => {
@@ -69,17 +72,11 @@ export default class Circuit {
     };
   }
 
-  private findPart(id: string) {
+  private findPart(id: string): Part {
     return this.parts.find(part => part.id === id);
   }
 
-  deletePart(selectedPartId: string) {
-    const partIndex = this.parts.findIndex(part => part.id === selectedPartId);
-    this.parts.splice(partIndex, 1);
-    const ids = this.getPartPoleIds(selectedPartId);
-    ids.forEach(poleId => {
-      this.nodes.forEach(node => node.delete(poleId));
-    });
-    this.nodes = this.nodes.filter(node => node.size > 1);
+  private findPartIndex(id: string): number {
+    return this.parts.findIndex(part => part.id === id);
   }
 }

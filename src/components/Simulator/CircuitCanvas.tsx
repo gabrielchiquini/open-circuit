@@ -23,6 +23,11 @@ interface IState {
 }
 
 export default class CircuitCanvas extends Component<IProps, IState> {
+
+  private static isMouseEvent(ev: Event): ev is MouseEvent {
+    const anyEvent = ev as any;
+    return !isNaN(anyEvent.layerX) && !isNaN(anyEvent.layerY);
+  }
   private circuit: Circuit;
   private container: HTMLDivElement;
   private stage: Konva.Stage;
@@ -58,9 +63,9 @@ export default class CircuitCanvas extends Component<IProps, IState> {
           <div>
             <i className="fa fa-fw fa-redo" onClick={this.rotatePart}/>
           </div>
-          {/* <div>
+          <div>
             <i className="fa fa-fw fa-trash-alt" onClick={this.deletePart}/>
-          </div> */}
+          </div>
         </div>
         <div
           className="circuit-area"
@@ -89,7 +94,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
       height: 1000,
     });
     this.nodeManager = new NodeManager(this.stage);
-    this.nodeManager.setupKonva().then(__ => this.stage.on('click tap', ev => this.stageClicked(ev)));
+    this.nodeManager.setupKonva().then(() => this.stage.on('click tap', ev => this.stageClicked(ev)));
   }
 
   addEvents(node: Konva.Group): any {
@@ -155,7 +160,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   private guessClickPosition(ev: Konva.KonvaEventObject<Event>) {
     let posX = 0;
     let posY = 0;
-    if (this.isMouseEvent(ev.evt)) {
+    if (CircuitCanvas.isMouseEvent(ev.evt)) {
       posY = ev.evt.pageY;
       posX = ev.evt.pageX;
     } else {
@@ -166,11 +171,6 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     posY += this.container.scrollTop - this.container.offsetTop;
     posX += this.container.scrollLeft - this.container.offsetLeft;
     return {posX, posY};
-  }
-
-  private isMouseEvent(event: Event): event is MouseEvent {
-    const anyEvent = event as any;
-    return typeof anyEvent.layerX === 'number' && typeof anyEvent.layerY === 'number';
   }
 
   private stageClicked(ev: KonvaEventObject<Event>): void {
@@ -184,8 +184,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   }
 
   private async addSelectedElement(posX: number, posY: number) {
-    const selectedConstructor = this.props.selectedElement();
-    const part = new selectedConstructor();
+    const part = Reflect.construct(this.props.selectedElement(), []);
     const node = await part.getNode();
     this.addEvents(node);
     this.circuit.addPart(part);
