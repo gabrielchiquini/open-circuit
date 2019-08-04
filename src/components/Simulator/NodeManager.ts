@@ -6,6 +6,7 @@ import {
   getHorizontalLine,
   getVerticalLine,
   realDimension,
+  RESPONSE_LABEL,
   SELECTION_COLOR,
   STROKE_WIDTH,
 } from './Circuit/util';
@@ -19,6 +20,7 @@ export default class NodeManager {
   get selectedPart() {
     return this._selectedPart;
   }
+
   stage: Konva.Stage;
   container: HTMLDivElement;
   circuitLayer: Konva.Layer<Konva.Node>;
@@ -85,12 +87,13 @@ export default class NodeManager {
       stroke: CIRCUIT_COLOR,
       strokeWidth: STROKE_WIDTH,
       tension: 1,
-      name: `pole-${target.id()} pole-${selectedPole.id()}`,
+      name: `pole-${target.id()} pole-${selectedPole.id()}`, // pole- is important!
     });
     selectedPole.fill(CIRCUIT_COLOR);
     target.fill(CIRCUIT_COLOR);
     this.addNode(line);
   }
+
 
   selectPole(target: Konva.Circle): void {
     target.fill(SELECTION_COLOR);
@@ -163,12 +166,43 @@ export default class NodeManager {
 
   deletePart(poles: string[]) {
     this.getSelectedPart().destroy();
-    const linesMatching = this.circuitLayer.find(node => {
-      const name = node.name();
-      return node instanceof Line && poles.findIndex(pole => name.includes(pole)) > -1;
-    }).toArray();
+    const linesMatching = this.getLinesMatching(poles);
     linesMatching.forEach(node => node.destroy());
     this.stage.draw();
+  }
+
+  getLinesMatching(poles: string[]): Konva.Line[] {
+    return this.circuitLayer.find((node: Konva.Node) => {
+      const name = node.name();
+      return node instanceof Line && poles.findIndex(pole => name.includes(pole)) > -1;
+    }).toArray() as Konva.Line[];
+  }
+
+  updateResponse(response: string[], poles: string[]) {
+    this.stage.find('.' + RESPONSE_LABEL).each(label => label.destroy());
+    poles.forEach((pole, index) => {
+      const position = this.stage.findOne('#' + pole).getAbsolutePosition();
+      // simple label
+      const simpleLabel = new Konva.Label({
+        ...position,
+        opacity: 0.75,
+        name: RESPONSE_LABEL,
+      });
+
+      simpleLabel.add(
+        new Konva.Tag({
+          fill: '#2b2b2b',
+        }),
+      );
+      const text = new Konva.Text({
+        text: response[index] + ' V',
+        padding: 5,
+        fill: 'white',
+      });
+      simpleLabel.add(text);
+      this.circuitLayer.add(simpleLabel);
+    });
+    this.stage.batchDraw();
   }
 
   private getSelectedPart() {

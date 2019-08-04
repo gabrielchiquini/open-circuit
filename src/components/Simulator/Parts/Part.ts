@@ -5,6 +5,7 @@ import IDimension from '../../../util/IDimension';
 import {getImage, scaleHigherDimension} from '../../../util/imageUtil';
 import IPartProperties from '../IPartProperties';
 import PartName from './util/PartName';
+import {moveToNextBorder} from "../Circuit/util";
 
 export default abstract class Part {
   abstract get type(): string;
@@ -70,6 +71,13 @@ export default abstract class Part {
   private async createNode(): Promise<Konva.Group> {
     const group = new Konva.Group({
       id: this.id,
+      draggable: true,
+      dragBoundFunc(pos) {
+        return {
+          x: moveToNextBorder(pos.x),
+          y: moveToNextBorder(pos.y),
+        };
+      },
     });
     const image = await this.getImage();
     const shape = partRect(this.dimension, group);

@@ -8,6 +8,7 @@ export const BACKGROUND_COLOR = 'lightgrey';
 export const SELECTION_COLOR = '#eee';
 export const AREA_UNIT = 20;
 export const STROKE_WIDTH = 1;
+export const RESPONSE_LABEL = 'response-label';
 const MARGIN = AREA_UNIT;
 
 interface IBounds {
@@ -17,14 +18,18 @@ interface IBounds {
   maxY: number;
 }
 
-export function correctPosition(position: number, dimension: number, upperBound: number): number {
-  const center = position - dimension / 2;
-  position = Math.max(MARGIN, Math.min(center, upperBound - dimension));
+export function moveToNextBorder(position: number) {
   let gridDistance = position % AREA_UNIT;
   if (gridDistance > AREA_UNIT / 2) {
     gridDistance = gridDistance - AREA_UNIT; // move to next border
   }
   return position - gridDistance;
+}
+
+export function correctPosition(position: number, dimension: number, upperBound: number): number {
+  const center = position - dimension / 2;
+  position = Math.max(MARGIN, Math.min(center, upperBound - dimension));
+  return moveToNextBorder(position);
 }
 
 export function calculateCenter(dimension: number, position: number): number {

@@ -12,6 +12,10 @@ export default class Circuit {
     this.nodes = [];
   }
 
+  getNodes() {
+    return this.nodes.concat();
+  }
+
   addPart(part: Part) {
     this.parts.push(part);
   }

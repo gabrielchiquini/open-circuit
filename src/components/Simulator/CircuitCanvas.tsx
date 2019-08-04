@@ -8,10 +8,12 @@ import PropertiesEditor from './PropertiesEditor';
 import IPartProperties from './IPartProperties';
 
 import './CircuitCanvas.scss';
+import Part from "./Parts/Part";
 
 interface IProps {
   circuit: Circuit;
   selectedElement: () => SomePart;
+  response: string[];
 }
 
 interface IState {
@@ -24,10 +26,6 @@ interface IState {
 
 export default class CircuitCanvas extends Component<IProps, IState> {
 
-  private static isMouseEvent(ev: Event): ev is MouseEvent {
-    const anyEvent = ev as any;
-    return !isNaN(anyEvent.layerX) && !isNaN(anyEvent.layerY);
-  }
   private circuit: Circuit;
   private container: HTMLDivElement;
   private stage: Konva.Stage;
@@ -51,6 +49,17 @@ export default class CircuitCanvas extends Component<IProps, IState> {
         height: window.innerHeight,
       });
     });
+  }
+
+  private static isMouseEvent(ev: Event): ev is MouseEvent {
+    const anyEvent = ev as any;
+    return !isNaN(anyEvent.layerX) && !isNaN(anyEvent.layerY);
+  }
+
+  componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
+    if (nextProps.response) {
+      this.updateResponse(nextProps.response);
+    }
   }
 
   render() {
@@ -97,7 +106,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     this.nodeManager.setupKonva().then(() => this.stage.on('click tap', ev => this.stageClicked(ev)));
   }
 
-  addEvents(node: Konva.Group): any {
+  addEvents(node: Konva.Group, poleIds: string[]): any {
     node.getChildren().each(childNode => {
       if (childNode.name() === PartName.Pole) {
         childNode.on('click touchend', ev => {
@@ -108,6 +117,22 @@ export default class CircuitCanvas extends Component<IProps, IState> {
           this.handlePartClick(ev);
         });
       }
+    });
+    let anchors: Konva.Line[] = [];
+    node.on('dragstart', () => {
+      anchors = this.nodeManager.getLinesMatching(poleIds);
+    });
+    node.on('dragmove', () => {
+      anchors.forEach(line => {
+        const name = line.name();
+        const matchingPoles = name.split(' ').map(token => {
+          const poleId = token.replace('pole-', '');
+          return this.stage.findOne('#' + poleId);
+        });
+        const points = matchingPoles.flatMap(pole => [pole.getAbsolutePosition().x, pole.getAbsolutePosition().y]);
+        console.log(points);
+        line.points(points);
+      });
     });
   }
 
@@ -184,9 +209,9 @@ export default class CircuitCanvas extends Component<IProps, IState> {
   }
 
   private async addSelectedElement(posX: number, posY: number) {
-    const part = Reflect.construct(this.props.selectedElement(), []);
+    const part: Part = Reflect.construct(this.props.selectedElement(), []);
     const node = await part.getNode();
-    this.addEvents(node);
+    this.addEvents(node, part.getPoleIds());
     this.circuit.addPart(part);
     this.nodeManager.addPart(node, posX, posY);
   }
@@ -196,5 +221,14 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     this.nodeManager.deletePart(poles);
     this.circuit.deletePart(this.nodeManager.selectedPart);
     this.setState({isPartSelected: false});
+  };
+
+  private updateResponse(response: string[]) {
+    const poles = this.circuit
+      .getNodes()
+      .map(node => node.values().next().value) // first pole of each node
+      .reverse() // just don't know why reverse
+      .slice(1) // first node is reference
+    this.nodeManager.updateResponse(response, poles);
   }
 }
