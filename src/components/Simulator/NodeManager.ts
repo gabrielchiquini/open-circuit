@@ -12,6 +12,7 @@ import {
 } from './Circuit/util';
 import IPartProperty from './IPartProperty';
 import PartName from './Parts/util/PartName';
+import IResponseRepresentation from "./Circuit/IResponseRepresentation";
 
 const CLICK_RECT_SIZE = 40;
 
@@ -178,10 +179,10 @@ export default class NodeManager {
     }).toArray() as Konva.Line[];
   }
 
-  updateResponse(response: string[], poles: string[]) {
+  updateResponse(response: IResponseRepresentation[]) {
     this.stage.find('.' + RESPONSE_LABEL).each(label => label.destroy());
-    poles.forEach((pole, index) => {
-      const position = this.stage.findOne('#' + pole).getAbsolutePosition();
+    response.forEach((nodeVoltage) => {
+      const position = this.stage.findOne('#' + nodeVoltage.pole).getAbsolutePosition();
       // simple label
       const simpleLabel = new Konva.Label({
         ...position,
@@ -195,7 +196,7 @@ export default class NodeManager {
         }),
       );
       const text = new Konva.Text({
-        text: response[index] + ' V',
+        text: nodeVoltage.voltage + ' V',
         padding: 5,
         fill: 'white',
       });

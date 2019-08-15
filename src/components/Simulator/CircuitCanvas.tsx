@@ -9,11 +9,12 @@ import IPartProperties from './IPartProperties';
 
 import './CircuitCanvas.scss';
 import Part from "./Parts/Part";
+import IResponseRepresentation from "./Circuit/IResponseRepresentation";
 
 interface IProps {
   circuit: Circuit;
   selectedElement: () => SomePart;
-  response: string[];
+  response: IResponseRepresentation[];
 }
 
 interface IState {
@@ -25,6 +26,11 @@ interface IState {
 }
 
 export default class CircuitCanvas extends Component<IProps, IState> {
+
+  private static isMouseEvent(ev: Event): ev is MouseEvent {
+    const anyEvent = ev as any;
+    return !isNaN(anyEvent.layerX) && !isNaN(anyEvent.layerY);
+  }
 
   private circuit: Circuit;
   private container: HTMLDivElement;
@@ -49,11 +55,6 @@ export default class CircuitCanvas extends Component<IProps, IState> {
         height: window.innerHeight,
       });
     });
-  }
-
-  private static isMouseEvent(ev: Event): ev is MouseEvent {
-    const anyEvent = ev as any;
-    return !isNaN(anyEvent.layerX) && !isNaN(anyEvent.layerY);
   }
 
   componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
@@ -130,7 +131,6 @@ export default class CircuitCanvas extends Component<IProps, IState> {
           return this.stage.findOne('#' + poleId);
         });
         const points = matchingPoles.flatMap(pole => [pole.getAbsolutePosition().x, pole.getAbsolutePosition().y]);
-        console.log(points);
         line.points(points);
       });
     });
@@ -223,12 +223,12 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     this.setState({isPartSelected: false});
   };
 
-  private updateResponse(response: string[]) {
-    const poles = this.circuit
-      .getNodes()
-      .map(node => node.values().next().value) // first pole of each node
-      .reverse() // just don't know why reverse
-      .slice(1) // first node is reference
-    this.nodeManager.updateResponse(response, poles);
+  private updateResponse(response: IResponseRepresentation[]) {
+    // const poles = this.circuit
+    //   .getNodes()
+    //   .map(node => node.values().next().value) // first pole of each node
+    //   .reverse() // just don't know why reverse
+    //   .slice(1) // first node is reference
+    this.nodeManager.updateResponse(response);
   }
 }
