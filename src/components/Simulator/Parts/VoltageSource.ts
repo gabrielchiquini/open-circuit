@@ -46,8 +46,8 @@ export default class VoltageSource extends Part {
   }
 
   protected definePoles(shape: Konva.Rect, group: Konva.Group, poleShapes: Konva.Circle[]): void {
-    const leftPole = poleShapes[1];
-    const rightPole = poleShapes[0];
+    const leftPole = poleShapes[0];
+    const rightPole = poleShapes[1];
     const groupDimension = realDimension(shape);
     const y = groupDimension.height / 2;
     rightPole.x(shape.width());
