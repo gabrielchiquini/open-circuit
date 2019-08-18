@@ -8,11 +8,9 @@ import PartName from './util/PartName';
 import {moveToNextBorder} from "../Circuit/util";
 
 export default abstract class Part {
-  abstract get type(): string;
   properties: IPartProperties;
   _node: Promise<Konva.Group>;
   uids: string[];
-  private _id: string;
 
   protected constructor(public poles: number) {
     if (poles < 1) {
@@ -26,6 +24,10 @@ export default abstract class Part {
   static get imageSrc(): string {
     throw new Error('Method not implemented');
   }
+
+  abstract get type(): string;
+
+  private _id: string;
 
   get id() {
     return this._id;
@@ -87,12 +89,16 @@ export default abstract class Part {
       x: centerPositionX(shape, image.width),
       y: centerPositionY(shape, image.height),
     });
-    const mainProperty = this.properties[this.mainProperty];
-    const propertyLabel = new Konva.Text({
-      text: `${mainProperty.value} ${mainProperty.unit}`,
-      id: this.id + '-label',
-    });
-    group.add(shape, imageNode, propertyLabel);
+    group.add(shape, imageNode);
+
+    if (Object.keys(this.properties).length) {
+      const mainProperty = this.properties[this.mainProperty];
+      const propertyLabel = new Konva.Text({
+        text: `${mainProperty.value} ${mainProperty.unit}`,
+        id: this.id + '-label',
+      });
+      group.add(propertyLabel);
+    }
     const poleShapes = getPoleShapes(this.uids);
     this.definePoles(shape, group, poleShapes);
     return group;
