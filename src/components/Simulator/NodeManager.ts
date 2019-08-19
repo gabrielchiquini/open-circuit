@@ -12,9 +12,9 @@ import {
 } from './Circuit/util';
 import IPartProperty from './IPartProperty';
 import PartName from './Parts/util/PartName';
-import IResponseRepresentation from "./Circuit/IResponseRepresentation";
+import {INodeVoltage} from "./Circuit/IResponseRepresentation";
 
-const CLICK_RECT_SIZE = 40;
+const CLICK_RECT_SIZE = 30;
 
 export default class NodeManager {
 
@@ -22,9 +22,14 @@ export default class NodeManager {
     return this._selectedPart;
   }
 
+
+  static selectPole(target: Konva.Circle): void {
+    target.fill(SELECTION_COLOR);
+    target.draw();
+  }
+
   stage: Konva.Stage;
-  container: HTMLDivElement;
-  circuitLayer: Konva.Layer<Konva.Node>;
+  private circuitLayer: Konva.Layer<Konva.Node>;
 
   private _selectedPart: string;
 
@@ -67,9 +72,7 @@ export default class NodeManager {
 
   addPart(node: Konva.Group<Konva.Node>, posX: number, posY: number): any {
     this.definePartPosition(node, posX, posY);
-    if (this.canInsert(node)) {
-      this.addNode(node);
-    }
+    this.addNode(node);
   }
 
   definePartPosition(node: Konva.Group, posX: number, posY: number) {
@@ -93,12 +96,6 @@ export default class NodeManager {
     selectedPole.fill(CIRCUIT_COLOR);
     target.fill(CIRCUIT_COLOR);
     this.addNode(line);
-  }
-
-
-  selectPole(target: Konva.Circle): void {
-    target.fill(SELECTION_COLOR);
-    target.draw();
   }
 
   updatePartProperties(editingPartId: string, properties: IPartProperty): any {
@@ -169,7 +166,7 @@ export default class NodeManager {
     this.getSelectedPart().destroy();
     const linesMatching = this.getLinesMatching(poles);
     linesMatching.forEach(node => node.destroy());
-    this.stage.draw();
+    this.stage.batchDraw();
   }
 
   getLinesMatching(poles: string[]): Konva.Line[] {
@@ -179,10 +176,15 @@ export default class NodeManager {
     }).toArray() as Konva.Line[];
   }
 
-  updateResponse(response: IResponseRepresentation[]) {
+  updateResponse(response: INodeVoltage[]) {
     this.stage.find('.' + RESPONSE_LABEL).each(label => label.destroy());
-    response.forEach((nodeVoltage) => {
-      const position = this.stage.findOne('#' + nodeVoltage.pole).getAbsolutePosition();
+    response.forEach(nodeVoltage => {
+      const node = this.stage.findOne('#' + nodeVoltage.pole);
+      if (!node) {
+        this.stage.find('.' + RESPONSE_LABEL).each(label => label.destroy());
+        return;
+      }
+      const position = node.getAbsolutePosition();
       // simple label
       const simpleLabel = new Konva.Label({
         ...position,
@@ -239,16 +241,5 @@ export default class NodeManager {
 
   private heigth(): number {
     return this.stage.height();
-  }
-
-  private canInsert(node: Konva.Node): any {
-    // TODO: correct insert
-    // const interceptor = Array.from(this.circuitLayer.getChildren())
-    //   .filter(existingPart => !(existingPart instanceof Line))
-    //   .find(existingPart => {
-    //     return hasIntersection(existingPart, node);
-    //   });
-    // return typeof interceptor === 'undefined';
-    return true;
   }
 }

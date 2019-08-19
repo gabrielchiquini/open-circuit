@@ -42,7 +42,6 @@ export default class Ground extends Part {
     const pole = poleShapes[0];
     const groupDimension = realDimension(shape);
     pole.y(0);
-    console.log(groupDimension.width)
     pole.x(groupDimension.width / 2 - 0.5);
 
     group.add(pole);

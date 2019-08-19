@@ -6,7 +6,12 @@ import Circuit from './Circuit/Circuit';
 import {SomePart} from './Parts';
 import IResponseRepresentation from "./Circuit/IResponseRepresentation";
 
-export default class SimulatorContainer extends Component<{}, { selectedPart: SomePart, response: IResponseRepresentation[] }> {
+interface IState {
+  selectedPart: SomePart;
+  response: IResponseRepresentation;
+}
+
+export default class SimulatorContainer extends Component<{}, IState> {
   circuit: Circuit;
 
   constructor(props: {}) {
@@ -38,17 +43,20 @@ export default class SimulatorContainer extends Component<{}, { selectedPart: So
   };
 
   simulate = () => {
-    console.log(this.circuit.getRepresentation());
-    const response = calculate(this.circuit.getRepresentation()).map(value => {
+    const nodes = calculate(this.circuit.getRepresentation()).map(value => {
       return {
         pole: value.pole,
         voltage: value.voltage.toFixed(2),
       };
     });
+    const response: IResponseRepresentation = {
+      timestamp: new Date(),
+      nodes,
+    };
     this.setState({response});
-  }
+  };
 
-  private changedSelectedElement = (selectedPart: SomePart) => {
+  changedSelectedElement = (selectedPart: SomePart) => {
     this.setState({selectedPart});
   };
 }

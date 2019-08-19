@@ -9,12 +9,12 @@ import IPartProperties from './IPartProperties';
 
 import './CircuitCanvas.scss';
 import Part from "./Parts/Part";
-import IResponseRepresentation from "./Circuit/IResponseRepresentation";
+import IResponseRepresentation, {INodeVoltage} from "./Circuit/IResponseRepresentation";
 
 interface IProps {
   circuit: Circuit;
   selectedElement: () => SomePart;
-  response: IResponseRepresentation[];
+  response: IResponseRepresentation;
 }
 
 interface IState {
@@ -26,11 +26,6 @@ interface IState {
 }
 
 export default class CircuitCanvas extends Component<IProps, IState> {
-
-  private static isMouseEvent(ev: Event): ev is MouseEvent {
-    const anyEvent = ev as any;
-    return !isNaN(anyEvent.layerX) && !isNaN(anyEvent.layerY);
-  }
 
   private circuit: Circuit;
   private container: HTMLDivElement;
@@ -57,9 +52,16 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     });
   }
 
+  private static isMouseEvent(ev: Event): ev is MouseEvent {
+    const anyEvent = ev as any;
+    return !isNaN(anyEvent.layerX) && !isNaN(anyEvent.layerY);
+  }
+
   componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
     if (nextProps.response) {
-      this.updateResponse(nextProps.response);
+      if(!this.props.response || (nextProps.response.timestamp.getTime() !== this.props.response.timestamp.getTime())) {
+        this.updateResponse(nextProps.response.nodes);
+      }
     }
   }
 
@@ -178,7 +180,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
       this.selectedPole = null;
     } else {
       this.selectedPole = target;
-      this.nodeManager.selectPole(target);
+      NodeManager.selectPole(target);
     }
   }
 
@@ -223,7 +225,7 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     this.setState({isPartSelected: false});
   };
 
-  private updateResponse(response: IResponseRepresentation[]) {
+  private updateResponse(response: INodeVoltage[]) {
     // const poles = this.circuit
     //   .getNodes()
     //   .map(node => node.values().next().value) // first pole of each node

@@ -15,7 +15,7 @@ export default class Resistor extends Part {
 
   protected get dimension(): IDimension {
     return {
-      width: 5,
+      width: 3,
       height: 2,
     };
   }
