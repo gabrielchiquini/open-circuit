@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { SomePart } from './Parts';
-import { PARTS } from './Parts';
+import React, {Component} from 'react';
+import {PARTS, SomePart} from './Parts';
 import './PartSelector.scss';
 
 interface IPropsType {
   changeSelectedPart: (part: SomePart) => void;
   selectedElement: () => SomePart;
   simulate: () => any;
+  addPart: () => any;
 }
 
 interface IStateType {
@@ -26,7 +26,7 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
       <div>
         <div className="selector-toggle">
           <i className="far fa-play-circle" onClick={this.props.simulate}/>
-          <i className={'fa fa-fw fa-angle-' + (this.state.visible ? 'up' : 'down')} onClick={this.toggle} />
+          <i className={'fa fa-fw fa-angle-' + (this.state.visible ? 'up' : 'down')} onClick={this.toggle}/>
         </div>
         <div className="circuit-parts m-2" hidden={!this.state.visible}>
           {PARTS.map(part => {
@@ -36,11 +36,10 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
             }
             return (
               <div className={clazz.join(' ')} key={part.name} onClick={() => this.props.changeSelectedPart(part)}>
-                <img src={part.imageSrc} className="part-image"/>
+                <img src={part.imageSrc} className="part-image" alt="part image"/>
               </div>
             );
           })}
-          {/*{this.props.response ? `[${this.props.response.join(' | ')}]` : ''}*/}
         </div>
       </div>
     );

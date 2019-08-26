@@ -9,12 +9,15 @@ import IPartProperties from './IPartProperties';
 
 import './CircuitCanvas.scss';
 import Part from "./Parts/Part";
-import IResponseRepresentation, {INodeVoltage} from "./Circuit/IResponseRepresentation";
+import IResponseRepresentation from "./Circuit/IResponseRepresentation";
+import {Observable} from "rxjs";
 
 interface IProps {
   circuit: Circuit;
   selectedElement: () => SomePart;
-  response: IResponseRepresentation;
+  // response: IResponseRepresentation;
+  addPart$: Observable<void>;
+  response$: Observable<IResponseRepresentation>;
 }
 
 interface IState {
@@ -26,6 +29,11 @@ interface IState {
 }
 
 export default class CircuitCanvas extends Component<IProps, IState> {
+
+  private static isMouseEvent(ev: Event): ev is MouseEvent {
+    const anyEvent = ev as any;
+    return !isNaN(anyEvent.layerX) && !isNaN(anyEvent.layerY);
+  }
 
   private circuit: Circuit;
   private container: HTMLDivElement;
@@ -50,19 +58,6 @@ export default class CircuitCanvas extends Component<IProps, IState> {
         height: window.innerHeight,
       });
     });
-  }
-
-  private static isMouseEvent(ev: Event): ev is MouseEvent {
-    const anyEvent = ev as any;
-    return !isNaN(anyEvent.layerX) && !isNaN(anyEvent.layerY);
-  }
-
-  componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
-    if (nextProps.response) {
-      if(!this.props.response || (nextProps.response.timestamp.getTime() !== this.props.response.timestamp.getTime())) {
-        this.updateResponse(nextProps.response.nodes);
-      }
-    }
   }
 
   render() {
@@ -107,6 +102,9 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     });
     this.nodeManager = new NodeManager(this.stage);
     this.nodeManager.setupKonva().then(() => this.stage.on('click tap', ev => this.stageClicked(ev)));
+
+    this.props.addPart$.subscribe(() => this.addSelectedElement());
+    this.props.response$.subscribe(response => this.nodeManager.updateResponse(response.nodes));
   }
 
   addEvents(node: Konva.Group, poleIds: string[]): any {
@@ -206,16 +204,17 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     }
     const {posX, posY} = this.guessClickPosition(ev);
     if (this.nodeManager.checkNoPoleNear(posX, posY)) {
-      this.addSelectedElement(posX, posY);
+      // this.addSelectedElement(posX, posY);
     }
   }
 
-  private async addSelectedElement(posX: number, posY: number) {
+  private async addSelectedElement() {
+
     const part: Part = Reflect.construct(this.props.selectedElement(), []);
     const node = await part.getNode();
     this.addEvents(node, part.getPoleIds());
     this.circuit.addPart(part);
-    this.nodeManager.addPart(node, posX, posY);
+    this.nodeManager.addPart(node, this.container.scrollLeft, this.container.scrollTop + 40 /* selector height */);
   }
 
   private deletePart = () => {
@@ -225,12 +224,4 @@ export default class CircuitCanvas extends Component<IProps, IState> {
     this.setState({isPartSelected: false});
   };
 
-  private updateResponse(response: INodeVoltage[]) {
-    // const poles = this.circuit
-    //   .getNodes()
-    //   .map(node => node.values().next().value) // first pole of each node
-    //   .reverse() // just don't know why reverse
-    //   .slice(1) // first node is reference
-    this.nodeManager.updateResponse(response);
-  }
 }
