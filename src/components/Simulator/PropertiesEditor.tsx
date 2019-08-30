@@ -37,24 +37,23 @@ export default class PropertiesEditor extends Component<IPropsType, IStateType> 
   render() {
     return (
       <Modal show={this.props.visible} onHide={this.props.editingHide} onEntered={this.opened}>
-        <Modal.Header>
-          <Modal.Title>Edit Properties</Modal.Title>
-        </Modal.Header>
         <Modal.Body>
           <form onSubmit={this.submitForm} ref={this.formRef}>
             {Object.keys(this.state.fields).map(name => {
               const property = this.state.fields[name];
               return (
-                <div className="form-group" key={property.unit}>
-                  <label>{property.label}</label>
-                  <input
-                    className="form-control"
-                    type="number"
-                    name={name}
-                    defaultValue={property.value.toString()}
-                    onChange={this.handleChange}
-                    required
-                  />
+                <div className="form-group row" key={property.unit}>
+                  <label className="col-4 mt-1">{property.label}</label>
+                  <div className="col-8">
+                    <input
+                      className="form-control "
+                      type="number"
+                      name={name}
+                      defaultValue={property.value.toString()}
+                      onChange={this.handleChange}
+                      required
+                    />
+                  </div>
                   <div className="invalid-feedback">Required field</div>
                 </div>
               );

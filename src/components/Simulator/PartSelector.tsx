@@ -31,9 +31,6 @@ export default class PartSelector extends Component<IPropsType, IStateType> {
         <div className="circuit-parts m-2" hidden={!this.state.visible}>
           {PARTS.map(part => {
             const clazz = ['part-card', 'mr-3'];
-            if (selectedPart.imageSrc === part.imageSrc) {
-              clazz.push('selected');
-            }
             return (
               <div className={clazz.join(' ')} key={part.name} onClick={() => this.props.changeSelectedPart(part)}>
                 <img src={part.imageSrc} className="part-image" alt="part image"/>
