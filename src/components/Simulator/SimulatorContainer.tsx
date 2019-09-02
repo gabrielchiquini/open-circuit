@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import CircuitCanvas from './CircuitCanvas';
-import calculate, {CircuitError} from 'open-circuit-calculator';
+// import calculate, {CircuitError} from 'open-circuit-calculator';
 import PartSelector from './PartSelector';
 import Circuit from './Circuit/Circuit';
 import {SomePart} from './Parts';
@@ -51,7 +51,7 @@ export default class SimulatorContainer extends Component<{}, IState> {
       const nodes = calculate(this.circuit.getRepresentation()).map(value => {
         return {
           pole: value.pole,
-          voltage: value.voltage.toFixed(2),
+          voltageText: this.getVoltageText(value.voltage),
         };
       });
       const response: IResponseRepresentation = {
@@ -78,4 +78,22 @@ export default class SimulatorContainer extends Component<{}, IState> {
     this.setState({selectedPart}, callback);
 
   };
+
+  private getVoltageText(value: number): string {
+    const order = Math.floor(Math.log10(value)) + 1;
+    if (order > 0) {
+      return value + ' V';
+    } else if (order >= -3) {
+      return this.roundValue(value, 3) + ' mV';
+    } else if (order >= -6) {
+      return this.roundValue(value, 3) + ' μV';
+    } else if (order >= -9) {
+      return this.roundValue(value, 9) + ' nV';
+    }
+    return value.toFixed(2);
+  }
+
+  private roundValue(value: number, exponent: number): string {
+    return (value * Math.pow(value, exponent)).toFixed(3);
+  }
 }

@@ -5,9 +5,9 @@ import _image from '../../../assets/images/VoltageSource.svg';
 import IPartProperties from '../IPartProperties';
 import {realDimension} from '../Circuit/util';
 
-const DEFAULT_VOLTAGE = 5;
+const DEFAULT_CURRENT = 1;
 
-export default class VoltageSource extends Part {
+export default class CurrentSource extends Part {
 
   static get imageSrc() {
     return _image;
@@ -25,11 +25,11 @@ export default class VoltageSource extends Part {
   }
 
   protected get imageSrc() {
-    return VoltageSource.imageSrc;
+    return CurrentSource.imageSrc;
   }
-  readonly mainProperty = 'voltage';
-  voltage = DEFAULT_VOLTAGE;
-  readonly type = 'VoltageSource';
+  readonly mainProperty = 'current';
+  current = DEFAULT_CURRENT;
+  readonly type = 'CurrentSource';
 
   constructor() {
     super(2);
@@ -38,9 +38,9 @@ export default class VoltageSource extends Part {
   protected defineProperties(): IPartProperties {
     return {
       voltageText: {
-        label: 'Voltage',
-        value: DEFAULT_VOLTAGE,
-        unit: 'V',
+        label: 'Current',
+        value: DEFAULT_CURRENT,
+        unit: 'A',
       },
     };
   }
