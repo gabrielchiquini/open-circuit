@@ -9,6 +9,14 @@ const DEFAULT_VOLTAGE = 5;
 
 export default class VoltageSource extends Part {
 
+  readonly mainProperty = 'voltage';
+  voltage = DEFAULT_VOLTAGE;
+  readonly type = 'VoltageSource';
+
+  constructor() {
+    super(2);
+  }
+
   static get imageSrc() {
     return _image;
   }
@@ -27,17 +35,10 @@ export default class VoltageSource extends Part {
   protected get imageSrc() {
     return VoltageSource.imageSrc;
   }
-  readonly mainProperty = 'voltage';
-  voltage = DEFAULT_VOLTAGE;
-  readonly type = 'VoltageSource';
-
-  constructor() {
-    super(2);
-  }
 
   protected defineProperties(): IPartProperties {
     return {
-      voltageText: {
+      voltage: {
         label: 'Voltage',
         value: DEFAULT_VOLTAGE,
         unit: 'V',

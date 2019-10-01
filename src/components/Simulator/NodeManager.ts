@@ -198,7 +198,7 @@ export default class NodeManager {
         }),
       );
       const text = new Konva.Text({
-        text: nodeVoltage.voltageText + ' V',
+        text: nodeVoltage.voltage,
         padding: 5,
         fill: 'white',
       });

@@ -1,13 +1,21 @@
 import Part from './Part';
 import IDimension from '../../../util/IDimension';
 import Konva from 'konva';
-import _image from '../../../assets/images/VoltageSource.svg';
+import _image from '../../../assets/images/CurrentSource.svg';
 import IPartProperties from '../IPartProperties';
 import {realDimension} from '../Circuit/util';
 
 const DEFAULT_CURRENT = 1;
 
 export default class CurrentSource extends Part {
+
+  readonly mainProperty = 'current';
+  current = DEFAULT_CURRENT;
+  readonly type = 'CurrentSource';
+
+  constructor() {
+    super(2);
+  }
 
   static get imageSrc() {
     return _image;
@@ -27,17 +35,10 @@ export default class CurrentSource extends Part {
   protected get imageSrc() {
     return CurrentSource.imageSrc;
   }
-  readonly mainProperty = 'current';
-  current = DEFAULT_CURRENT;
-  readonly type = 'CurrentSource';
-
-  constructor() {
-    super(2);
-  }
 
   protected defineProperties(): IPartProperties {
     return {
-      voltageText: {
+      current: {
         label: 'Current',
         value: DEFAULT_CURRENT,
         unit: 'A',
