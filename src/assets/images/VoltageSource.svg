@@ -2,105 +2,106 @@
 <!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 
 <svg
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:cc="http://creativecommons.org/ns#"
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-        xmlns="http://www.w3.org/2000/svg"
-        version="1.1"
-        id="svg2"
-        x="0px"
-        y="0px"
-        viewBox="0 0 80 35.000001"
-        xml:space="preserve"
-        sodipodi:docname="VoltageSource.svg"
-        width="80"
-        height="35"
-        inkscape:version="0.92.3 (2405546, 2018-03-11)"><metadata
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   x="0px"
+   y="0px"
+   viewBox="0 0 80 35.000001"
+   xml:space="preserve"
+   sodipodi:docname="VoltageSource.svg"
+   width="80"
+   height="35"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"><metadata
    id="metadata16"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-        rdf:resource="http://purl.org/dc/dcmitype/StillImage"/><dc:title></dc:title></cc:Work></rdf:RDF></metadata>
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata>
     <defs
-            id="defs14"><inkscape:tag
+   id="defs14"><inkscape:tag
      id="Conjunto 1"
      inkscape:label="Conjunto 1"
      inkscape:expanded="true" /></defs>
     <sodipodi:namedview
-            pagecolor="#ffffff"
-            bordercolor="#666666"
-            borderopacity="1"
-            objecttolerance="10"
-            gridtolerance="10"
-            guidetolerance="10"
-            inkscape:pageopacity="0"
-            inkscape:pageshadow="2"
-            inkscape:window-width="1853"
-            inkscape:window-height="1023"
-            id="namedview12"
-            showgrid="false"
-            fit-margin-top="0"
-            fit-margin-left="0"
-            fit-margin-right="0"
-            fit-margin-bottom="0"
-            inkscape:zoom="6.723647"
-            inkscape:cx="23.982106"
-            inkscape:cy="17.550001"
-            inkscape:window-x="1987"
-            inkscape:window-y="27"
-            inkscape:window-maximized="1"
-            inkscape:current-layer="layer1"/>
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1015"
+   id="namedview12"
+   showgrid="false"
+   fit-margin-top="0"
+   fit-margin-left="0"
+   fit-margin-right="0"
+   fit-margin-bottom="0"
+   inkscape:zoom="6.723647"
+   inkscape:cx="23.982106"
+   inkscape:cy="17.550001"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="g4529" />
     <style
-            type="text/css"
-            id="style2">
+   type="text/css"
+   id="style2">
 	.st0{fill:none;stroke:#000000;}
 	.st1{fill:none;stroke:#000000;stroke-linecap:square;}
 </style>
     <g
-            id="layer1"
-            transform="rotate(-90,32.45,10.05)">
+   id="layer1"
+   transform="rotate(-90,32.45,10.05)">
 
 
 
 
 
 	<g
-            id="g4529"
-            transform="rotate(90,25,17.6)"><path
-     style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:connector-curvature="0"
-     d="M 42,17.406316 H 65"
-     class="st0"
-     id="path2194" />
+   id="g4529"
+   transform="rotate(90,25,17.6)"><path
+   style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
+   inkscape:connector-curvature="0"
+   d="M 42,17.6 H 65"
+   class="st0"
+   id="path2194" />
         <path
-                style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
-                inkscape:connector-curvature="0"
-                d="M 8,17.483677 H -15"
-                class="st0"
-                id="path2196"/>
+   style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
+   inkscape:connector-curvature="0"
+   d="M 8,17.6 H -15"
+   class="st0"
+   id="path2196" />
         <path
-                style="fill:none;stroke:#000000"
-                inkscape:connector-curvature="0"
-                d="M 37.5,17.5 H 30.7"
-                class="st0"
-                id="path2243"/>
+   style="fill:none;stroke:#000000"
+   inkscape:connector-curvature="0"
+   d="M 37.5,17.5 H 30.7"
+   class="st0"
+   id="path2243" />
         <path
-                style="fill:none;stroke:#000000"
-                inkscape:connector-curvature="0"
-                d="M 34.1,21 V 14.2"
-                class="st0"
-                id="path2245"/>
+   style="fill:none;stroke:#000000"
+   inkscape:connector-curvature="0"
+   d="M 34.1,21 V 14.2"
+   class="st0"
+   id="path2245" />
         <path
-                style="fill:none;stroke:#000000"
-                inkscape:connector-curvature="0"
-                d="M 15.3,21 V 14.2"
-                class="st0"
-                id="path2247"/>
+   style="fill:none;stroke:#000000"
+   inkscape:connector-curvature="0"
+   d="M 15.3,21 V 14.2"
+   class="st0"
+   id="path2247" />
         <path
-                style="fill:none;stroke:#000000;stroke-linecap:square"
-                inkscape:connector-curvature="0"
-                d="m 25,34.6 c -9.4,0 -17,-7.6 -17,-17 0,-9.4 7.6,-17 17,-17 9.4,0 17,7.6 17,17 0,9.4 -7.6,17 -17,17 z"
-                class="st1"
-                id="path2249"/></g>
+   style="fill:none;stroke:#000000;stroke-linecap:square"
+   inkscape:connector-curvature="0"
+   d="m 25,34.6 c -9.4,0 -17,-7.6 -17,-17 0,-9.4 7.6,-17 17,-17 9.4,0 17,7.6 17,17 0,9.4 -7.6,17 -17,17 z"
+   class="st1"
+   id="path2249" /></g>
 </g>
 </svg>
