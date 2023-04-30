@@ -9,7 +9,7 @@
     "cordova-android": "^7.1.4",
     "cordova-browser": "^5.0.4",
     "cordova-plugin-whitelist": "^1.3.3",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "konva": "^2.6.0",
     "lodash": "^4.17.11",
     "popper.js": "^1.14.6",
